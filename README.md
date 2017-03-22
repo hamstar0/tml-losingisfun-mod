@@ -1,4 +1,4 @@
 # tml-losingisfun-mod
-Sources for a tModLoader (Terraria mod loader) mod called Lives. This mod adds a limit to the total deaths of a player, along with some relevant associated gameplay mechanics.
+Sources for a tModLoader (Terraria mod loader) mod called Losing Is Fun. This mod adds various tweaks and gameplay features in the name of fairness (e.g. balance against cheese strats).
 
 https://forums.terraria.org/index.php?threads/losing-is-fun-a-fairness-mod.55854/
