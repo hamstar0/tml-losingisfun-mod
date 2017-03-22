@@ -1,0 +1,23 @@
+Scrapped
+-	Trap tiles cannot be actuated
+-	Change bow recipe (requires cobweb)
+-	Bosses can only be summoned once per day/night cycle
+-	Meteors are limited
+
+
+v1
+-	Attempt to eliminate hoiks
+-	NPCs won't sell to you if their houses are too far above the ground
+-	Slime mount can only stomp 3x in rapid succession
+-	Buff EoW + Destroyer (segments get added defense)
+-	Boomerang nerf
+-	Change yoyo to slow player movement on use
+-	Nerf gravity potions
+-	Change gem hook recipes (require a hook)
+
+v0.1
+-	NPCs won't sell to you if their houses are too close together
+-	Nerf Fetid Baghnakhs
+-	Nerf Daedalus Stormbow
+-	Set lucky horseshoe to only sometimes save from falls
+-	Teleport items have warmup and cooldown
