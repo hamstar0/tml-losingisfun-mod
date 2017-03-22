@@ -9,13 +9,16 @@ using Utils.JsonConfig;
 namespace LosingIsFun {
 	public class ConfigurationData {
 		public string VersionSinceUpdate = "";
-		public int EvacWarpChargeDurationFrames = 5 * 60;
-		public int MinimumTownNpcTileSpacing = 15;
+		public int EvacWarpChargeDurationFrames = (int)(3.5f * 60f);
+		public int MinimumTownNpcTileSpacing = 12;
+		public bool FetidBaghnakhsNerf = true;
+		public bool DaedalusStormbowNerf = true;
+		public float LuckyHorseshoeFailChance = 0.5f;
 	}
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 1, 0, 0 );
+		public readonly static Version ConfigVersion = new Version( 0, 1, 1 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 
@@ -38,9 +41,17 @@ namespace LosingIsFun {
 			Version vers_since = this.Config.Data.VersionSinceUpdate != "" ?
 				new Version( this.Config.Data.VersionSinceUpdate ) :
 				new Version();
+			if( vers_since == new Version(1, 0, 0) ) {
+				vers_since = new Version(0, 1, 0);
+			}
 
 			if( vers_since < LosingIsFunMod.ConfigVersion ) {
 				ErrorLogger.Log( "Losing Is Fun config updated to " + LosingIsFunMod.ConfigVersion.ToString() );
+
+				if( vers_since < new Version(0, 1, 1) ) {
+					this.Config.Data.EvacWarpChargeDurationFrames = new ConfigurationData().EvacWarpChargeDurationFrames;
+					this.Config.Data.MinimumTownNpcTileSpacing = new ConfigurationData().MinimumTownNpcTileSpacing;
+				}
 				
 				this.Config.Data.VersionSinceUpdate = LosingIsFunMod.ConfigVersion.ToString();
 				this.Config.SaveFile();

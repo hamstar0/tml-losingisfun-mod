@@ -63,6 +63,9 @@ namespace LosingIsFun {
 			packet.Write( (byte)TheLunaticNetProtocolTypes.SendModSettings );
 			packet.Write( (int)mymod.Config.Data.EvacWarpChargeDurationFrames );
 			packet.Write( (int)mymod.Config.Data.MinimumTownNpcTileSpacing );
+			packet.Write( (bool)mymod.Config.Data.FetidBaghnakhsNerf );
+			packet.Write( (bool)mymod.Config.Data.DaedalusStormbowNerf );
+			packet.Write( (float)mymod.Config.Data.LuckyHorseshoeFailChance );
 
 			packet.Send( (int)player.whoAmI );
 		}
@@ -79,18 +82,15 @@ namespace LosingIsFun {
 
 			int evac_dur = reader.ReadInt32();
 			int min_town = reader.ReadInt32();
-
-			if( evac_dur < 0 ) {
-				Debug.Log( "LosingIsFunNetProtocol.ReceiveModSettingsOnClient - Invalid 'EvacWarpChargeDurationFrames' quantity." );
-				return;
-			}
-			if( min_town < 0 ) {
-				Debug.Log( "LosingIsFunNetProtocol.ReceiveModSettingsOnClient - Invalid 'MinimumTownNpcTileSpacing' quantity." );
-				return;
-			}
+			bool bagh_nerf = reader.ReadBoolean();
+			bool storm_nerf = reader.ReadBoolean();
+			float horse_fail = reader.ReadSingle();
 
 			mymod.Config.Data.EvacWarpChargeDurationFrames = evac_dur;
 			mymod.Config.Data.MinimumTownNpcTileSpacing = min_town;
+			mymod.Config.Data.FetidBaghnakhsNerf = bagh_nerf;
+			mymod.Config.Data.DaedalusStormbowNerf = storm_nerf;
+			mymod.Config.Data.LuckyHorseshoeFailChance = horse_fail;
 		}
 
 

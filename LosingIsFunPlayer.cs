@@ -11,6 +11,7 @@ namespace LosingIsFun {
 
 
 		public override void PreUpdate() {
+			var mymod = (LosingIsFunMod)this.mod;
 			Item use_item = this.player.inventory[this.player.selectedItem];
 			bool bad_use_item = true;
 
@@ -31,7 +32,7 @@ namespace LosingIsFun {
 							}
 						}
 
-						if( !this.RunEvac() ) {
+						if( mymod.Config.Data.EvacWarpChargeDurationFrames > 0 && !this.RunEvac() ) {
 							this.player.itemTime = 0;
 						}
 					}
@@ -49,9 +50,11 @@ namespace LosingIsFun {
 		}
 
 		public override void UpdateEquips( ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff ) {
-			// Set fall immunity to work only 50% of the time!
+			var mymod = (LosingIsFunMod)this.mod;
+
+			// Set fall immunity to work only 50% of the time
 			if( this.player.noFallDmg ) {
-				this.player.noFallDmg = Main.rand.NextBool();
+				this.player.noFallDmg = Main.rand.NextFloat() <= mymod.Config.Data.LuckyHorseshoeFailChance;
 			}
 		}
 
@@ -62,12 +65,13 @@ namespace LosingIsFun {
 			}
 
 			var mymod = (LosingIsFunMod)this.mod;
+			var duration = mymod.Config.Data.EvacWarpChargeDurationFrames;
 
 			this.EvacTimer++;
 
 			Dust.NewDust( this.player.position, this.player.width, this.player.height, 15, 0, 0, 150, Color.Cyan, 1.2f );
 
-			if( this.EvacTimer > mymod.Config.Data.EvacWarpChargeDurationFrames ) {
+			if( this.EvacTimer > duration ) {
 				PlayerHelper.Evac( this.player );
 				this.EvacTimer = 0;
 				return false;
