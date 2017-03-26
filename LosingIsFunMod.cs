@@ -15,11 +15,12 @@ namespace LosingIsFun {
 		public bool DaedalusStormbowNerf = true;
 		public float LuckyHorseshoeFailChance = 0.5f;
 		public float YoyoMoveSpeedClamp = 2f;
+		public float MinimumRatioTownNPCSolidBlocks = 0.5f;
 	}
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 0, 2, 0 );
+		public readonly static Version ConfigVersion = new Version( 0, 2, 1 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 

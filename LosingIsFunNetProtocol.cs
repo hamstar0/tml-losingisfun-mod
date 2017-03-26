@@ -67,6 +67,7 @@ namespace LosingIsFun {
 			packet.Write( (bool)mymod.Config.Data.DaedalusStormbowNerf );
 			packet.Write( (float)mymod.Config.Data.LuckyHorseshoeFailChance );
 			packet.Write( (float)mymod.Config.Data.YoyoMoveSpeedClamp );
+			packet.Write( (float)mymod.Config.Data.MinimumRatioTownNPCSolidBlocks );
 			
 			packet.Send( (int)player.whoAmI );
 		}
@@ -87,6 +88,7 @@ namespace LosingIsFun {
 			bool storm_nerf = reader.ReadBoolean();
 			float horse_fail = reader.ReadSingle();
 			float yoyo_move = reader.ReadSingle();
+			float block_ratio = reader.ReadSingle();
 
 			mymod.Config.Data.EvacWarpChargeDurationFrames = evac_dur;
 			mymod.Config.Data.MinimumTownNpcTileSpacing = min_town;
@@ -94,6 +96,7 @@ namespace LosingIsFun {
 			mymod.Config.Data.DaedalusStormbowNerf = storm_nerf;
 			mymod.Config.Data.LuckyHorseshoeFailChance = horse_fail;
 			mymod.Config.Data.YoyoMoveSpeedClamp = yoyo_move;
+			mymod.Config.Data.MinimumRatioTownNPCSolidBlocks = block_ratio;
 		}
 		
 

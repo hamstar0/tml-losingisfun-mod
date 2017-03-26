@@ -21,13 +21,15 @@ namespace LosingIsFun {
 		}
 
 		public override void OnEnterWorld( Player player ) {
-			if( Main.netMode != 2 ) {   // Not server
-				var mymod = (LosingIsFunMod)this.mod;
-				if( player.whoAmI == this.player.whoAmI ) {
+			if( player.whoAmI == this.player.whoAmI ) {
+				if( Main.netMode != 2 ) {   // Not server
+					var mymod = (LosingIsFunMod)this.mod;
 					if( !mymod.Config.LoadFile() ) {
 						mymod.Config.SaveFile();
 					}
+				}
 
+				if( Main.netMode == 1 ) {	// Client
 					LosingIsFunNetProtocol.SendModSettingsRequestFromClient( this.mod );
 				}
 			}

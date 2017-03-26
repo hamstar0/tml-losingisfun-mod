@@ -48,7 +48,7 @@ namespace LosingIsFun {
 					}
 				}
 
-				if( solids < ((min_x+1) * min_y) / 2 ) {  // More than 1/2 solid needed
+				if( solids < (float)((min_x+1) * min_y) * mymod.Config.Data.MinimumRatioTownNPCSolidBlocks ) {  // +1/2 solid needed
 					too_high = true;
 				}
 			}
