@@ -10,6 +10,32 @@ namespace LosingIsFun {
 		private bool EvacPotConsumed = false;
 
 
+		////////////////
+
+		public override void clientClone( ModPlayer clone ) {
+			base.clientClone( clone );
+			var myclone = (LosingIsFunPlayer)clone;
+
+			myclone.EvacTimer = this.EvacTimer;
+			myclone.EvacPotConsumed = this.EvacPotConsumed;
+		}
+
+		public override void OnEnterWorld( Player player ) {
+			if( Main.netMode != 2 ) {   // Not server
+				var mymod = (LosingIsFunMod)this.mod;
+				if( player.whoAmI == this.player.whoAmI ) {
+					if( !mymod.Config.LoadFile() ) {
+						mymod.Config.SaveFile();
+					}
+
+					LosingIsFunNetProtocol.SendModSettingsRequestFromClient( this.mod );
+				}
+			}
+		}
+
+
+		////////////////
+
 		public override void PreUpdate() {
 			var mymod = (LosingIsFunMod)this.mod;
 			Item use_item = this.player.inventory[this.player.selectedItem];
@@ -60,10 +86,16 @@ namespace LosingIsFun {
 
 		
 		public override void PostUpdateRunSpeeds() {
-			if( this.player.controlUseItem && this.player.itemTime <= 1 ) {
+			if( this.player.controlUseItem && this.player.itemTime > 1 ) {
 				if( ItemClassifications.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
 					var mymod = (LosingIsFunMod)this.mod;
-					this.player.velocity.X *= mymod.Config.Data.YoyoMoveSpeedMul;
+					var fric = mymod.Config.Data.YoyoMoveSpeedClamp;
+					
+					if( this.player.velocity.X > fric ) {
+						this.player.velocity.X -= 0.12f;
+					} else if( this.player.velocity.X < -fric ) {
+						this.player.velocity.X += 0.12f;
+					}
 				}
 			}
 		}

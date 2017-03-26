@@ -14,7 +14,7 @@ namespace LosingIsFun {
 		public bool FetidBaghnakhsNerf = true;
 		public bool DaedalusStormbowNerf = true;
 		public float LuckyHorseshoeFailChance = 0.5f;
-		public float YoyoMoveSpeedMul = 0.75f;
+		public float YoyoMoveSpeedClamp = 1.75f;
 	}
 
 

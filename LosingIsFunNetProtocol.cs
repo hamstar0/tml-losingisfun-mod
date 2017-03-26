@@ -19,7 +19,7 @@ namespace LosingIsFun {
 			switch( protocol ) {
 			case TheLunaticNetProtocolTypes.SendRequestModSettings:
 				if( is_debug ) { Debug.Log( "SendRequestModSettings" ); }
-				LosingIsFunNetProtocol.ReceiveRequestModSettingsOnServer( mymod, reader );
+				LosingIsFunNetProtocol.ReceiveModSettingsRequestOnServer( mymod, reader );
 				break;
 			case TheLunaticNetProtocolTypes.SendModSettings:
 				if( is_debug ) { Debug.Log( "SendModSettings" ); }
@@ -37,7 +37,7 @@ namespace LosingIsFun {
 		// Client Senders
 		////////////////
 		
-		public static void SendRequestModSettingsFromClient( Mod mod ) {
+		public static void SendModSettingsRequestFromClient( Mod mod ) {
 			// Clients only
 			if( Main.netMode != 1 ) { return; }
 
@@ -66,7 +66,7 @@ namespace LosingIsFun {
 			packet.Write( (bool)mymod.Config.Data.FetidBaghnakhsNerf );
 			packet.Write( (bool)mymod.Config.Data.DaedalusStormbowNerf );
 			packet.Write( (float)mymod.Config.Data.LuckyHorseshoeFailChance );
-			packet.Write( (float)mymod.Config.Data.YoyoMoveSpeedMul );
+			packet.Write( (float)mymod.Config.Data.YoyoMoveSpeedClamp );
 			
 			packet.Send( (int)player.whoAmI );
 		}
@@ -93,7 +93,7 @@ namespace LosingIsFun {
 			mymod.Config.Data.FetidBaghnakhsNerf = bagh_nerf;
 			mymod.Config.Data.DaedalusStormbowNerf = storm_nerf;
 			mymod.Config.Data.LuckyHorseshoeFailChance = horse_fail;
-			mymod.Config.Data.YoyoMoveSpeedMul = yoyo_move;
+			mymod.Config.Data.YoyoMoveSpeedClamp = yoyo_move;
 		}
 		
 
@@ -102,7 +102,7 @@ namespace LosingIsFun {
 		// Server Receivers
 		////////////////
 
-		private static void ReceiveRequestModSettingsOnServer( LosingIsFunMod mymod, BinaryReader reader ) {
+		private static void ReceiveModSettingsRequestOnServer( LosingIsFunMod mymod, BinaryReader reader ) {
 			// Server only
 			if( Main.netMode != 2 ) { return; }
 
