@@ -12,9 +12,9 @@ v1
 -	Boomerang nerf
 -	Nerf gravity potions
 -	Change gem hook recipes (require a hook)
--	Change yoyo to slow player movement on use
 
-v0.1.2
+v0.2
+-	Change yoyo to slow player movement on use
 -	NPCs won't sell to you if their houses are too far above the ground
 v0.1
 -	NPCs won't sell to you if their houses are too close together
