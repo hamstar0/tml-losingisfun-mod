@@ -1,5 +1,5 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
+
 
 namespace Utils {
 	public class TileHelper {

@@ -58,12 +58,15 @@ namespace LosingIsFun {
 			}
 		}
 
-
-		//public override void PostUpdateRunSpeeds() {
-		//	if( this.player.controlUseItem && this.player.itemTime <= 1 ) {
-		//		Item curr_item = this.player.inventory[this.player.selectedItem];
-		//	}
-		//}
+		
+		public override void PostUpdateRunSpeeds() {
+			if( this.player.controlUseItem && this.player.itemTime <= 1 ) {
+				if( ItemClassifications.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
+					var mymod = (LosingIsFunMod)this.mod;
+					this.player.velocity.X *= mymod.Config.Data.YoyoMoveSpeedMul;
+				}
+			}
+		}
 
 
 		private bool RunEvac() {

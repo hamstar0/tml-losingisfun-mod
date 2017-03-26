@@ -14,11 +14,12 @@ namespace LosingIsFun {
 		public bool FetidBaghnakhsNerf = true;
 		public bool DaedalusStormbowNerf = true;
 		public float LuckyHorseshoeFailChance = 0.5f;
+		public float YoyoMoveSpeedMul = 0.75f;
 	}
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 0, 1, 1 );
+		public readonly static Version ConfigVersion = new Version( 0, 2, 0 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 
@@ -41,7 +42,7 @@ namespace LosingIsFun {
 			Version vers_since = this.Config.Data.VersionSinceUpdate != "" ?
 				new Version( this.Config.Data.VersionSinceUpdate ) :
 				new Version();
-			if( vers_since == new Version(1, 0, 0) ) {
+			if( vers_since == new Version(1, 0, 0) ) {	// Oops!
 				vers_since = new Version(0, 1, 0);
 			}
 

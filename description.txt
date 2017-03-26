@@ -3,3 +3,5 @@ Makes Terraria fair. Work-in-progress.
 - Nerfed Fetid Baghnakhs, Daedalus Stormbow
 - NPCs won't sell to you if their houses are too close together
 - Home-teleport items have a 3.5s warmup; interrupts on move
+- v0.1.2 NPCs won't sell if too high off the ground
+- v0.2 Yoyos in use now slow movement speed by 3/4

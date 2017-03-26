@@ -66,7 +66,8 @@ namespace LosingIsFun {
 			packet.Write( (bool)mymod.Config.Data.FetidBaghnakhsNerf );
 			packet.Write( (bool)mymod.Config.Data.DaedalusStormbowNerf );
 			packet.Write( (float)mymod.Config.Data.LuckyHorseshoeFailChance );
-
+			packet.Write( (float)mymod.Config.Data.YoyoMoveSpeedMul );
+			
 			packet.Send( (int)player.whoAmI );
 		}
 
@@ -85,13 +86,16 @@ namespace LosingIsFun {
 			bool bagh_nerf = reader.ReadBoolean();
 			bool storm_nerf = reader.ReadBoolean();
 			float horse_fail = reader.ReadSingle();
+			float yoyo_move = reader.ReadSingle();
 
 			mymod.Config.Data.EvacWarpChargeDurationFrames = evac_dur;
 			mymod.Config.Data.MinimumTownNpcTileSpacing = min_town;
 			mymod.Config.Data.FetidBaghnakhsNerf = bagh_nerf;
 			mymod.Config.Data.DaedalusStormbowNerf = storm_nerf;
 			mymod.Config.Data.LuckyHorseshoeFailChance = horse_fail;
+			mymod.Config.Data.YoyoMoveSpeedMul = yoyo_move;
 		}
+		
 
 
 		////////////////
