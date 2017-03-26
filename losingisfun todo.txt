@@ -7,14 +7,15 @@ Scrapped
 
 v1
 -	Attempt to eliminate hoiks
--	NPCs won't sell to you if their houses are too far above the ground
 -	Slime mount can only stomp 3x in rapid succession
 -	Buff EoW + Destroyer (segments get added defense)
 -	Boomerang nerf
--	Change yoyo to slow player movement on use
 -	Nerf gravity potions
 -	Change gem hook recipes (require a hook)
+-	Change yoyo to slow player movement on use
 
+v0.1.2
+-	NPCs won't sell to you if their houses are too far above the ground
 v0.1
 -	NPCs won't sell to you if their houses are too close together
 -	Nerf Fetid Baghnakhs

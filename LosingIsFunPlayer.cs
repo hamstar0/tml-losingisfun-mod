@@ -59,6 +59,13 @@ namespace LosingIsFun {
 		}
 
 
+		//public override void PostUpdateRunSpeeds() {
+		//	if( this.player.controlUseItem && this.player.itemTime <= 1 ) {
+		//		Item curr_item = this.player.inventory[this.player.selectedItem];
+		//	}
+		//}
+
+
 		private bool RunEvac() {
 			if( this.player.velocity.X != 0 || this.player.velocity.Y != 0 ) {
 				return false;
