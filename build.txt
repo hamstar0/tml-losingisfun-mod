@@ -1,5 +1,5 @@
 author = hamstar
-version = 0.2.1
+version = 0.2.2
 displayName = Losing Is Fun
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
 includePDB = false

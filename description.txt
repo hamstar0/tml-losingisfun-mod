@@ -1,7 +1,8 @@
 Makes Terraria fair. Work-in-progress.
-- Set Horseshoe-based items to only sometimes save from falls
-- Nerfed Fetid Baghnakhs, Daedalus Stormbow
-- NPCs won't sell to you if their houses are too close together
-- Home-teleport items have a 3.5s warmup; interrupts on move
+- v0.1 Set Horseshoe-based items to only sometimes protect
+- v0.1 Nerfed Fetid Baghnakhs, Daedalus Stormbow
+- v0.1 Home-teleport needs a 3.5s warmup; interrupts on move
+- v0.1 NPCs won't sell to you if they're too close together
 - v0.1.2 NPCs won't sell if too high off the ground
 - v0.2 Yoyos in use now slow movement speed by 3/4
+- v0.2.2 Nerfed Reaver Sharks (equiv. Gold Pick)
