@@ -18,6 +18,12 @@ namespace LosingIsFun {
 					item.damage = 62;   // was 70
 				}
 				break;
+			case 2341:  // Reaver Shark
+				item.pick = mymod.Config.Data.ReaverSharkPower; // == Gold Pickaxe; otherwise too powerful
+				item.useTime = mymod.Config.Data.ReaverSharkSpeed;
+				item.useAnimation = item.useTime + 4;
+				break;
+			// TODO: Adjust Amber Staff
 			}
 		}
 	}

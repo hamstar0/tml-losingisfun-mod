@@ -3,7 +3,6 @@ using Terraria;
 using Terraria.ModLoader;
 using Utils;
 
-
 namespace LosingIsFun {
 	public enum TheLunaticNetProtocolTypes : byte {
 		SendRequestModSettings,
@@ -61,13 +60,7 @@ namespace LosingIsFun {
 			ModPacket packet = mymod.GetPacket();
 
 			packet.Write( (byte)TheLunaticNetProtocolTypes.SendModSettings );
-			packet.Write( (int)mymod.Config.Data.EvacWarpChargeDurationFrames );
-			packet.Write( (int)mymod.Config.Data.MinimumTownNpcTileSpacing );
-			packet.Write( (bool)mymod.Config.Data.FetidBaghnakhsNerf );
-			packet.Write( (bool)mymod.Config.Data.DaedalusStormbowNerf );
-			packet.Write( (float)mymod.Config.Data.LuckyHorseshoeFailChance );
-			packet.Write( (float)mymod.Config.Data.YoyoMoveSpeedClamp );
-			packet.Write( (float)mymod.Config.Data.MinimumRatioTownNPCSolidBlocks );
+			packet.Write( (string)mymod.Config.SerializeMe() );
 			
 			packet.Send( (int)player.whoAmI );
 		}
@@ -81,22 +74,8 @@ namespace LosingIsFun {
 		private static void ReceiveModSettingsOnClient( LosingIsFunMod mymod, BinaryReader reader ) {
 			// Clients only
 			if( Main.netMode != 1 ) { return; }
-
-			int evac_dur = reader.ReadInt32();
-			int min_town = reader.ReadInt32();
-			bool bagh_nerf = reader.ReadBoolean();
-			bool storm_nerf = reader.ReadBoolean();
-			float horse_fail = reader.ReadSingle();
-			float yoyo_move = reader.ReadSingle();
-			float block_ratio = reader.ReadSingle();
-
-			mymod.Config.Data.EvacWarpChargeDurationFrames = evac_dur;
-			mymod.Config.Data.MinimumTownNpcTileSpacing = min_town;
-			mymod.Config.Data.FetidBaghnakhsNerf = bagh_nerf;
-			mymod.Config.Data.DaedalusStormbowNerf = storm_nerf;
-			mymod.Config.Data.LuckyHorseshoeFailChance = horse_fail;
-			mymod.Config.Data.YoyoMoveSpeedClamp = yoyo_move;
-			mymod.Config.Data.MinimumRatioTownNPCSolidBlocks = block_ratio;
+			
+			mymod.Config.DeserializeMe( reader.ReadString() );
 		}
 		
 

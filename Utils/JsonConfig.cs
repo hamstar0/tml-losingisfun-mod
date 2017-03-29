@@ -9,6 +9,18 @@ namespace Utils.JsonConfig {
 		public T Data { get; private set; }
 
 
+		////////////////
+
+		public static string Serialize( T data ) {
+			return JsonConvert.SerializeObject( data, Formatting.Indented );
+		}
+		public static T Deserialize( string data ) {
+			return JsonConvert.DeserializeObject<T>( data );
+		}
+
+
+		////////////////
+
 		public JsonConfig( string filename, string pathname, T data ) {
 			this.FileName = filename;
 			this.PathName = pathname;
@@ -17,7 +29,19 @@ namespace Utils.JsonConfig {
 			Directory.CreateDirectory( Main.SavePath );
 			Directory.CreateDirectory( this.GetPathOnly() );
 		}
+
+		////////////////
+
+		public string SerializeMe() {
+			return JsonConfig<T>.Serialize( this.Data );
+		}
+
+		public void DeserializeMe( string data ) {
+			this.Data = JsonConfig<T>.Deserialize( data );
+		}
 		
+		////////////////
+
 		public string GetPathOnly() {
 			if( this.PathName != "" ) {
 				return Main.SavePath + Path.DirectorySeparatorChar + this.PathName;
@@ -33,20 +57,21 @@ namespace Utils.JsonConfig {
 			this.PathName = pathname;
 		}
 
+
 		public bool LoadFile() {
 			string path = this.GetFullPath();
 			if( !File.Exists( path ) ) { return false; }
 
 			using( StreamReader r = new StreamReader(path) ) {
 				string json = r.ReadToEnd();
-				this.Data = JsonConvert.DeserializeObject<T>(json);
+				this.Data = JsonConfig<T>.Deserialize( json );
 			}
 			return true;
 		}
 
 		public void SaveFile() {
 			string path = this.GetFullPath();
-			string json = JsonConvert.SerializeObject( this.Data, Formatting.Indented );
+			string json = JsonConfig<T>.Serialize( this.Data );
 			File.WriteAllText( path, json );
 		}
 
