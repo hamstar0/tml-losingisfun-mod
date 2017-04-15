@@ -13,19 +13,19 @@ namespace LosingIsFun {
 	public class LosingIsFunNetProtocol {
 		public static void RouteReceivedPackets( LosingIsFunMod mymod, BinaryReader reader ) {
 			TheLunaticNetProtocolTypes protocol = (TheLunaticNetProtocolTypes)reader.ReadByte();
-			bool is_debug = (Debug.DEBUGMODE & 1) > 0;
+			bool is_debug = (DebugHelper.DEBUGMODE & 1) > 0;
 
 			switch( protocol ) {
 			case TheLunaticNetProtocolTypes.SendRequestModSettings:
-				if( is_debug ) { Debug.Log( "SendRequestModSettings" ); }
+				if( is_debug ) { DebugHelper.Log( "SendRequestModSettings" ); }
 				LosingIsFunNetProtocol.ReceiveModSettingsRequestOnServer( mymod, reader );
 				break;
 			case TheLunaticNetProtocolTypes.SendModSettings:
-				if( is_debug ) { Debug.Log( "SendModSettings" ); }
+				if( is_debug ) { DebugHelper.Log( "SendModSettings" ); }
 				LosingIsFunNetProtocol.ReceiveModSettingsOnClient( mymod, reader );
 				break;
 			default:
-				Debug.Log( "Invalid packet protocol: " + protocol );
+				DebugHelper.Log( "Invalid packet protocol: " + protocol );
 				break;
 			}
 		}
@@ -91,7 +91,7 @@ namespace LosingIsFun {
 			int player_who = reader.ReadInt32();
 
 			if( player_who < 0 || player_who >= Main.player.Length || Main.player[player_who] == null ) {
-				Debug.Log( "LosingIsFunNetProtocol.ReceiveRequestModSettingsOnServer - Invalid player id " + player_who );
+				DebugHelper.Log( "LosingIsFunNetProtocol.ReceiveRequestModSettingsOnServer - Invalid player id " + player_who );
 				return;
 			}
 

@@ -52,5 +52,13 @@ namespace Utils {
 
 			return pos;
 		}
+
+
+		public static bool HasUsedNurse( Player player ) {
+			return Main.npcChatText == Lang.dialog( 227, false ) ||
+					Main.npcChatText == Lang.dialog( 228, false ) ||
+					Main.npcChatText == Lang.dialog( 229, false ) ||
+					Main.npcChatText == Lang.dialog( 230, false );
+		}
 	}
 }

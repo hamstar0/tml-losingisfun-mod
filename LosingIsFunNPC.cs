@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -40,7 +41,7 @@ namespace LosingIsFun {
 				int solids = 0;
 				int min_x = 16;
 				int min_y = 40;
-				for( int i = my_npc.homeTileX - (min_x/2); i < my_npc.homeTileX + (min_x/2); i++ ) {
+				for( int i = my_npc.homeTileX - (min_x / 2); i < my_npc.homeTileX + (min_x / 2); i++ ) {
 					for( int j = my_npc.homeTileY; j < my_npc.homeTileY + min_y; j++ ) {
 						if( !TileHelper.IsEmpty( i, j ) ) {
 							solids++;
@@ -48,7 +49,7 @@ namespace LosingIsFun {
 					}
 				}
 
-				if( solids < (float)((min_x+1) * min_y) * mymod.Config.Data.MinimumRatioTownNPCSolidBlocks ) {  // +1/2 solid needed
+				if( solids < (float)((min_x + 1) * min_y) * mymod.Config.Data.MinimumRatioTownNPCSolidBlocks ) {  // +1/2 solid needed
 					too_high = true;
 				}
 			}
@@ -69,6 +70,19 @@ namespace LosingIsFun {
 						shop.item[i].stack = 0;
 					}
 				}
+			}
+		}
+
+
+		public override void SetDefaults( NPC npc ) {
+			var mymod = (LosingIsFunMod)this.mod;
+
+			switch( npc.type ) {
+			case 548:   // Eternia Crystal
+				if( mymod.Config.Data.EterniaCrystalAntiHoik ) {
+					npc.noGravity = true;
+				}
+				break;
 			}
 		}
 	}

@@ -6,3 +6,10 @@ Makes Terraria fair. Work-in-progress.
 - v0.1.2 NPCs won't sell if too high off the ground
 - v0.2 Yoyos in use now slow movement speed by 3/4
 - v0.2.2 Nerfed Reaver Sharks (equiv. Gold Pick)
+- v0.3 Eternia Crystal is unhoikable
+- v0.3 Nerfed Cactus Sword
+- v0.3 Nerfed Snowballs
+- v0.3 Buffed Amber Staff
+- v0.3 Nurse now gives a stacking 3 min debuff on each use
+- v0.3 Ranged weapons do not crit while moving
+- v0.3 Ranged weapons crit +15% while still

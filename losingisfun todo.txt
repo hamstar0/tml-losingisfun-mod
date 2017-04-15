@@ -3,16 +3,31 @@ Scrapped
 -	Change bow recipe (requires cobweb)
 -	Bosses can only be summoned once per day/night cycle
 -	Meteors are limited
+-	Boomerang nerf
+-	Change gem hook recipes (require a hook)
 
 
 v1
--	Attempt to eliminate hoiks
 -	Slime mount can only stomp 3x in rapid succession
 -	Buff EoW + Destroyer (segments get added defense)
--	Boomerang nerf
 -	Nerf gravity potions
--	Change gem hook recipes (require a hook)
+v0.4
+-	Bosses get harder with each kill
 
+v0.3
+-	Ranged attacks no longer deal crits when fired while moving
+-	Nerf nurse
+	-	Implement Soreness stack
+	-	Implement Soreness debuff
+	-	Detect nurse use
+	-	@Plan
+		-	Each use of nurse increases a 'Soreness' debuff stack
+		-	Soreness reduces defense and movement speed by a % of player's current max
+		-	Soreness lasts for 3 minutes, and the time is refreshed by each use of the nurse
+-	Buff amber staff
+-	Nerf snowballs
+-	Nerf cactus sword
+-	Set Eternia Crystal to be unhoikable (floats)
 v0.2
 -	Change yoyo to slow player movement on use
 -	NPCs won't sell to you if their houses are too far above the ground

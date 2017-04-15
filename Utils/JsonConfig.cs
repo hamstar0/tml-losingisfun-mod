@@ -2,6 +2,7 @@
 using Terraria;
 using Newtonsoft.Json;
 
+
 namespace Utils.JsonConfig {
 	public class JsonConfig<T> {
 		public string FileName { get; private set; }

@@ -1,13 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LosingIsFun.Buffs;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Utils;
 
 
 namespace LosingIsFun {
-	class LosingIsFunPlayer : ModPlayer {
+	public class LosingIsFunPlayer : ModPlayer {
+		public int Soreness = 0;
+
 		private int EvacTimer = 0;
 		private bool EvacPotConsumed = false;
+		private bool IsUsingNurse = false;
 
 
 		////////////////
@@ -35,14 +40,26 @@ namespace LosingIsFun {
 			}
 		}
 
+		public override void Load( TagCompound tag ) {
+			this.Soreness = tag.GetInt( "soreness" );
+			if( this.Soreness > 0 ) {
+				SorenessDebuff.UpdateIcon( this );
+			}
+		}
+
+		public override TagCompound Save() {
+			return new TagCompound { { "soreness", this.Soreness } };
+		}
+
 
 		////////////////
 
 		public override void PreUpdate() {
 			var mymod = (LosingIsFunMod)this.mod;
 			Item use_item = this.player.inventory[this.player.selectedItem];
-			bool bad_use_item = true;
+			bool bad_evac_use_item = true;
 
+			// Apply item effects
 			if( use_item != null && !use_item.IsAir ) {
 				switch( use_item.type ) {
 				case 50:    // Magic Mirror
@@ -51,7 +68,7 @@ namespace LosingIsFun {
 				case 3199:  // Ice Mirror
 					if( this.player.itemTime > 0 ) {
 						this.player.itemTime = use_item.useTime;
-						bad_use_item = false;
+						bad_evac_use_item = false;
 
 						if( use_item.type == 2350 && this.player.itemAnimation == 0 ) {
 							if( !this.EvacPotConsumed ) {
@@ -66,16 +83,36 @@ namespace LosingIsFun {
 					}
 					break;
 				default:
-					bad_use_item = true;
+					bad_evac_use_item = true;
 					break;
 				}
 			}
 
-			if( bad_use_item ) {
+			// Reset evac item
+			if( bad_evac_use_item ) {
 				this.EvacTimer = 0;
 				this.EvacPotConsumed = false;
 			}
+
+			// Detect nurse use + add soreness
+			if( PlayerHelper.HasUsedNurse( this.player ) ) {
+				if( !this.IsUsingNurse ) {
+					this.IsUsingNurse = true;
+					SorenessDebuff.GiveTo( this );
+				}
+			} else if( this.IsUsingNurse ) {
+				this.IsUsingNurse = false;
+			}
 		}
+
+
+		public override void PostUpdate() {
+			// Apply soreness defense debuff (cannot use PreUpdateBuffs, PostUpdateBuffs, or ModBuff.Update for some reason)
+			if( this.Soreness > 0 ) {
+				SorenessDebuff.ApplyDefenselessness( (LosingIsFunMod)this.mod, this.player, this.Soreness );
+			}
+		}
+
 
 		public override void UpdateEquips( ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff ) {
 			var mymod = (LosingIsFunMod)this.mod;
@@ -88,9 +125,10 @@ namespace LosingIsFun {
 
 		
 		public override void PostUpdateRunSpeeds() {
+			var mymod = (LosingIsFunMod)this.mod;
+
 			if( this.player.controlUseItem && this.player.itemTime > 1 ) {
 				if( ItemClassifications.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
-					var mymod = (LosingIsFunMod)this.mod;
 					var fric = mymod.Config.Data.YoyoMoveSpeedClamp;
 					
 					if( this.player.velocity.X > fric ) {
@@ -100,9 +138,15 @@ namespace LosingIsFun {
 					}
 				}
 			}
+
+			if( this.Soreness > 0 ) {
+				SorenessDebuff.ApplyLameness( mymod, this.player, this.Soreness );
+			}
 		}
 
 
+		////////////////
+		
 		private bool RunEvac() {
 			if( this.player.velocity.X != 0 || this.player.velocity.Y != 0 ) {
 				return false;

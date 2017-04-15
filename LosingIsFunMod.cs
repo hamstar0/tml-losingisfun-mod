@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using LosingIsFun.Buffs;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 using Terraria.ModLoader;
@@ -9,20 +10,33 @@ using Utils.JsonConfig;
 namespace LosingIsFun {
 	public class ConfigurationData {
 		public string VersionSinceUpdate = "";
+
 		public int EvacWarpChargeDurationFrames = (int)(3.5f * 60f);
 		public int MinimumTownNpcTileSpacing = 12;
-		public bool FetidBaghnakhsNerf = true;
-		public bool DaedalusStormbowNerf = true;
+		public int FetidBaghnakhsDamage = 62;	// was 70
+		public int DaedalusStormbowUseTime = 30;	// was 19
 		public float LuckyHorseshoeFailChance = 0.5f;
 		public float YoyoMoveSpeedClamp = 2f;
 		public float MinimumRatioTownNPCSolidBlocks = 0.5f;
 		public int ReaverSharkPower = 55;
 		public int ReaverSharkSpeed = 17;
+		public int SnowballDamage = 6;  // was 8
+		public int CactusSwordDamage = 8;   // was 9
+		public int AmberStaffUseTime = 24;  // was 28
+
+		public bool EterniaCrystalAntiHoik = true;
+
+		public int SorenessDurationSeconds = 188;
+		public float SorenessLamenessPercent = 0.1f;
+		public float SorenessDefenselessnessPercent = 0.1f;
+
+		public bool RangedCritWithAimOnly = true;
+		public float RangedCritAddedAimPercentChance = 0.15f;
 	}
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 0, 2, 2 );
+		public readonly static Version ConfigVersion = new Version( 0, 3, 0 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 
@@ -60,6 +74,8 @@ namespace LosingIsFun {
 				this.Config.Data.VersionSinceUpdate = LosingIsFunMod.ConfigVersion.ToString();
 				this.Config.SaveFile();
 			}
+
+			SorenessDebuff.LoadTextures( this );
 		}
 
 
@@ -72,7 +88,7 @@ namespace LosingIsFun {
 		////////////////
 
 		public override void PostDrawInterface( SpriteBatch sb ) {
-			Debug.PrintToBatch( sb );
+			DebugHelper.PrintToBatch( sb );
 		}
 	}
 }
