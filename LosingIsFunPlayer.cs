@@ -11,7 +11,7 @@ namespace LosingIsFun {
 		public int Soreness = 0;
 
 		private int EvacTimer = 0;
-		private bool EvacPotConsumed = false;
+		private bool EvacPotInUse = false;
 		private bool IsUsingNurse = false;
 
 
@@ -22,7 +22,7 @@ namespace LosingIsFun {
 			var myclone = (LosingIsFunPlayer)clone;
 
 			myclone.EvacTimer = this.EvacTimer;
-			myclone.EvacPotConsumed = this.EvacPotConsumed;
+			myclone.EvacPotInUse = this.EvacPotInUse;
 		}
 
 		public override void OnEnterWorld( Player player ) {
@@ -54,46 +54,52 @@ namespace LosingIsFun {
 
 		////////////////
 
-		public override void PreUpdate() {
+		public override bool PreItemCheck() {
 			var mymod = (LosingIsFunMod)this.mod;
-			Item use_item = this.player.inventory[this.player.selectedItem];
-			bool bad_evac_use_item = true;
+			Item use_item = this.player.inventory[ this.player.selectedItem ];
+			bool can_run_evac = false;
 
-			// Apply item effects
-			if( use_item != null && !use_item.IsAir ) {
+			if( use_item.IsTheSameAs( Main.mouseItem ) ) {
+				use_item = Main.mouseItem;
+			}
+			
+			if( use_item != null && !use_item.IsAir ) {	// Apply item effects
 				switch( use_item.type ) {
 				case 50:    // Magic Mirror
 				case 2350:  // Recall Potion
 				case 3124:  // Cell Phone
 				case 3199:  // Ice Mirror
-					if( this.player.itemTime > 0 ) {
-						this.player.itemTime = use_item.useTime;
-						bad_evac_use_item = false;
+					if( mymod.Config.Data.EvacWarpChargeDurationFrames > 0 ) {
+						if( this.player.itemTime > 0 ) {    // In use
+							this.player.itemTime = use_item.useTime;
 
-						if( use_item.type == 2350 && this.player.itemAnimation == 0 ) {
-							if( !this.EvacPotConsumed ) {
-								this.EvacPotConsumed = true;
-								use_item.stack--;
+							if( use_item.type == 2350 && this.player.itemAnimation == 0 ) {
+								this.EvacPotInUse = true;
+								ItemHelper.ReduceStack( use_item, 1 );
+								this.player.itemTime = 0;
 							}
-						}
 
-						if( mymod.Config.Data.EvacWarpChargeDurationFrames > 0 && !this.RunEvac() ) {
-							this.player.itemTime = 0;
+							can_run_evac = true;
 						}
 					}
-					break;
-				default:
-					bad_evac_use_item = true;
 					break;
 				}
 			}
 
-			// Reset evac item
-			if( bad_evac_use_item ) {
+			if( this.EvacPotInUse ) {
+				can_run_evac = true;
+			}
+			
+			if( !can_run_evac || !this.RunEvac() ) {
 				this.EvacTimer = 0;
-				this.EvacPotConsumed = false;
+				this.EvacPotInUse = false;
 			}
 
+			return true;
+		}
+
+
+		public override void PreUpdate() {
 			// Detect nurse use + add soreness
 			if( PlayerHelper.HasUsedNurse( this.player ) ) {
 				if( !this.IsUsingNurse ) {
