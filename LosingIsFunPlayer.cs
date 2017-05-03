@@ -1,6 +1,7 @@
 ﻿using LosingIsFun.Buffs;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Utils;
@@ -11,8 +12,10 @@ namespace LosingIsFun {
 		public int Soreness = 0;
 
 		private int EvacTimer = 0;
-		private bool EvacPotInUse = false;
+		private bool EvacInUse = false;
 		private bool IsUsingNurse = false;
+		private int GravChangeDelay = 0;
+		private float PrevGravDir = 1f;
 
 
 		////////////////
@@ -21,8 +24,12 @@ namespace LosingIsFun {
 			base.clientClone( clone );
 			var myclone = (LosingIsFunPlayer)clone;
 
+			myclone.Soreness = this.Soreness;
 			myclone.EvacTimer = this.EvacTimer;
-			myclone.EvacPotInUse = this.EvacPotInUse;
+			myclone.EvacInUse = this.EvacInUse;
+			myclone.IsUsingNurse = this.IsUsingNurse;
+			myclone.GravChangeDelay = this.GravChangeDelay;
+			myclone.PrevGravDir = this.PrevGravDir;
 		}
 
 		public override void OnEnterWorld( Player player ) {
@@ -34,7 +41,7 @@ namespace LosingIsFun {
 					}
 				}
 
-				if( Main.netMode == 1 ) {	// Client
+				if( Main.netMode == 1 ) {   // Client
 					LosingIsFunNetProtocol.SendModSettingsRequestFromClient( this.mod );
 				}
 			}
@@ -56,43 +63,45 @@ namespace LosingIsFun {
 
 		public override bool PreItemCheck() {
 			var mymod = (LosingIsFunMod)this.mod;
-			Item use_item = this.player.inventory[ this.player.selectedItem ];
+			Item use_item = this.player.inventory[this.player.selectedItem];
 			bool can_run_evac = false;
 
 			if( use_item.IsTheSameAs( Main.mouseItem ) ) {
 				use_item = Main.mouseItem;
 			}
-			
-			if( use_item != null && !use_item.IsAir ) {	// Apply item effects
+
+			if( use_item != null && !use_item.IsAir ) { // Apply item effects
 				switch( use_item.type ) {
 				case 50:    // Magic Mirror
-				case 2350:  // Recall Potion
 				case 3124:  // Cell Phone
 				case 3199:  // Ice Mirror
+				case 2350:  // Recall Potion
 					if( mymod.Config.Data.EvacWarpChargeDurationFrames > 0 ) {
 						if( this.player.itemTime > 0 ) {    // In use
 							this.player.itemTime = use_item.useTime;
+							can_run_evac = true;
 
-							if( use_item.type == 2350 && this.player.itemAnimation == 0 ) {
-								this.EvacPotInUse = true;
-								ItemHelper.ReduceStack( use_item, 1 );
+							if( this.player.itemAnimation == 0 ) {
+								if( use_item.type == 2350 ) {   // Recall Potion
+									ItemHelper.ReduceStack( use_item, 1 );
+									this.EvacTimer += 30;   // Speed up warp by 0.5 seconds for Recall Potion
+								}
+								this.EvacInUse = true;
 								this.player.itemTime = 0;
 							}
-
-							can_run_evac = true;
 						}
 					}
 					break;
 				}
 			}
 
-			if( this.EvacPotInUse ) {
+			if( this.EvacInUse ) {
 				can_run_evac = true;
 			}
-			
+
 			if( !can_run_evac || !this.RunEvac() ) {
 				this.EvacTimer = 0;
-				this.EvacPotInUse = false;
+				this.EvacInUse = false;
 			}
 
 			return true;
@@ -100,6 +109,8 @@ namespace LosingIsFun {
 
 
 		public override void PreUpdate() {
+			var mymod = (LosingIsFunMod)this.mod;
+
 			// Detect nurse use + add soreness
 			if( PlayerHelper.HasUsedNurse( this.player ) ) {
 				if( !this.IsUsingNurse ) {
@@ -108,6 +119,23 @@ namespace LosingIsFun {
 				}
 			} else if( this.IsUsingNurse ) {
 				this.IsUsingNurse = false;
+			}
+
+			// Restrict gravitation potion rapid changing
+			if( this.player.gravControl && mymod.Config.Data.GravPotionFlipDelay > 0f ) {
+				if( this.GravChangeDelay > 0 ) {
+					if( this.PrevGravDir == -1 && this.player.gravDir == 1f ) {
+						this.player.gravDir = -1f;
+					} else if( this.PrevGravDir == 1 && this.player.gravDir == -1f ) {
+						this.player.gravDir = 1f;
+					}
+					this.GravChangeDelay--;
+				} else {
+					if( this.PrevGravDir != this.player.gravDir ) {
+						this.PrevGravDir = this.player.gravDir;
+						this.GravChangeDelay = mymod.Config.Data.GravPotionFlipDelay;
+					}
+				}
 			}
 		}
 
@@ -129,14 +157,14 @@ namespace LosingIsFun {
 			}
 		}
 
-		
+
 		public override void PostUpdateRunSpeeds() {
 			var mymod = (LosingIsFunMod)this.mod;
 
 			if( this.player.controlUseItem && this.player.itemTime > 1 ) {
 				if( ItemClassifications.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
 					var fric = mymod.Config.Data.YoyoMoveSpeedClamp;
-					
+
 					if( this.player.velocity.X > fric ) {
 						this.player.velocity.X -= 0.12f;
 					} else if( this.player.velocity.X < -fric ) {
@@ -152,7 +180,7 @@ namespace LosingIsFun {
 
 
 		////////////////
-		
+
 		private bool RunEvac() {
 			if( this.player.velocity.X != 0 || this.player.velocity.Y != 0 ) {
 				return false;

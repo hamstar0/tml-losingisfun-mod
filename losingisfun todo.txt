@@ -1,19 +1,20 @@
-Scrapped
+Scrapped or deferred
 -	Trap tiles cannot be actuated
 -	Change bow recipe (requires cobweb)
 -	Bosses can only be summoned once per day/night cycle
 -	Meteors are limited
 -	Boomerang nerf
 -	Change gem hook recipes (require a hook)
+-	Buff EoW + Destroyer (segments get added defense)
+-	Bosses get harder with each kill
+-	Slime mount can only stomp 3x in rapid succession
 
 
 v1
--	Slime mount can only stomp 3x in rapid succession
--	Buff EoW + Destroyer (segments get added defense)
--	Nerf gravity potions
-v0.4
--	Bosses get harder with each kill
-
+-	Nerf gravity potions (2.5s delay)
+-	Count background walls as 'ground' for vendor height check
+-	Traveling merchant shop isn't loading
+-	Fix magic mirror repeat
 v0.3
 -	Ranged attacks no longer deal crits when fired while moving
 -	Nerf nurse
