@@ -42,7 +42,7 @@ namespace LosingIsFun {
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 1, 1, 0 );
+		public readonly static Version ConfigVersion = new Version( 1, 0, 1 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 
