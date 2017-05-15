@@ -13,3 +13,4 @@ Makes Terraria fair. Work-in-progress.
 - v0.3 Nurse now gives a stacking 3 min debuff on each use
 - v0.3 Ranged weapons do not crit while moving
 - v0.3 Ranged weapons crit +15% while still
+- v1.0 Gravitation Potion flips have 2s cooldown

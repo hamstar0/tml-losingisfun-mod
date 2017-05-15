@@ -9,7 +9,9 @@ Scrapped or deferred
 -	Bosses get harder with each kill
 -	Slime mount can only stomp 3x in rapid succession
 
-
+v1.1
+-	Indicate recall failure with alert
+-	Fix sprint failure with medic debuff
 v1
 -	Nerf gravity potions (2.5s delay)
 -	Count background walls as 'ground' for vendor height check

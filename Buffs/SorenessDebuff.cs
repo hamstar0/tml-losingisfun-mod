@@ -66,9 +66,10 @@ namespace LosingIsFun.Buffs {
 		public static void ApplyLameness( LosingIsFunMod mymod, Player player, int soreness ) {
 			float lameness = mymod.Config.Data.SorenessLamenessPercent * (float)soreness;
 
+			//player.maxRunSpeed *= 1f - lameness;
+			//player.accRunSpeed = player.maxRunSpeed;
+			//player.moveSpeed *= 1f - lameness;
 			player.maxRunSpeed *= 1f - lameness;
-			player.accRunSpeed = player.maxRunSpeed;
-			player.moveSpeed *= 1f - lameness;
 		}
 	}
 }

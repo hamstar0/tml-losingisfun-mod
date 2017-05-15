@@ -183,6 +183,7 @@ namespace LosingIsFun {
 
 		private bool RunEvac() {
 			if( this.player.velocity.X != 0 || this.player.velocity.Y != 0 ) {
+				Main.NewText( "Recall interrupted by movement.", Color.Yellow );
 				return false;
 			}
 
