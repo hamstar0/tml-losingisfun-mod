@@ -64,7 +64,7 @@ namespace LosingIsFun {
 		public override bool PreItemCheck() {
 			var mymod = (LosingIsFunMod)this.mod;
 			Item use_item = this.player.inventory[this.player.selectedItem];
-			bool can_run_evac = false;
+			bool can_run_evac = false, evac_is_done = false;
 
 			if( use_item.IsTheSameAs( Main.mouseItem ) ) {
 				use_item = Main.mouseItem;
@@ -98,8 +98,9 @@ namespace LosingIsFun {
 			if( this.EvacInUse ) {
 				can_run_evac = true;
 			}
-
-			if( !can_run_evac || !this.RunEvac() ) {
+			
+			if( !can_run_evac || !this.RunEvac( out evac_is_done ) ) {
+				if( evac_is_done ) { this.player.itemTime = 0; }
 				this.EvacTimer = 0;
 				this.EvacInUse = false;
 			}
@@ -181,9 +182,12 @@ namespace LosingIsFun {
 
 		////////////////
 
-		private bool RunEvac() {
+		private bool RunEvac( out bool is_interrupted ) {
+			is_interrupted = false;
+
 			if( this.player.velocity.X != 0 || this.player.velocity.Y != 0 ) {
 				Main.NewText( "Recall interrupted by movement.", Color.Yellow );
+				is_interrupted = true;
 				return false;
 			}
 
@@ -199,7 +203,7 @@ namespace LosingIsFun {
 				this.EvacTimer = 0;
 				return false;
 			}
-
+			
 			return true;
 		}
 	}

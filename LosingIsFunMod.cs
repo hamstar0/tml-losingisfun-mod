@@ -16,7 +16,7 @@ namespace LosingIsFun {
 
 		public int EvacWarpChargeDurationFrames = (int)(3f * 60f);
 
-		public float LuckyHorseshoeFailChance = 0.5f;
+		public float LuckyHorseshoeFailChance = 0.35f;
 
 		public float YoyoMoveSpeedClamp = 2f;
 
@@ -42,7 +42,7 @@ namespace LosingIsFun {
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 1, 0, 1 );
+		public readonly static Version ConfigVersion = new Version( 1, 0, 2 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 
@@ -67,14 +67,17 @@ namespace LosingIsFun {
 				new Version();
 
 			if( vers_since < LosingIsFunMod.ConfigVersion ) {
+				var new_config = new ConfigurationData();
 				ErrorLogger.Log( "Losing Is Fun config updated to " + LosingIsFunMod.ConfigVersion.ToString() );
 
 				if( vers_since < new Version(0, 1, 1) ) {
-					this.Config.Data.MinimumTownNpcTileSpacing = new ConfigurationData().MinimumTownNpcTileSpacing;
+					this.Config.Data.MinimumTownNpcTileSpacing = new_config.MinimumTownNpcTileSpacing;
 				}
-
 				if( vers_since < new Version( 0, 3, 1 ) ) {
-					this.Config.Data.EvacWarpChargeDurationFrames = new ConfigurationData().EvacWarpChargeDurationFrames;
+					this.Config.Data.EvacWarpChargeDurationFrames = new_config.EvacWarpChargeDurationFrames;
+				}
+				if( vers_since < new Version( 1, 0, 2 ) ) {
+					this.Config.Data.LuckyHorseshoeFailChance = new_config.LuckyHorseshoeFailChance;
 				}
 
 				this.Config.Data.VersionSinceUpdate = LosingIsFunMod.ConfigVersion.ToString();

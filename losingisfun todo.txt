@@ -9,7 +9,10 @@ Scrapped or deferred
 -	Bosses get harder with each kill
 -	Slime mount can only stomp 3x in rapid succession
 
-v1.1
+v1.0.2
+-	Fix recall warning spam
+-	Reduce chance of fall death with lucky horseshoe
+v1.0.1
 -	Indicate recall failure with alert
 -	Fix sprint failure with medic debuff
 v1
