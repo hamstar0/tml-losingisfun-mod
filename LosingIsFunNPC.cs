@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
@@ -7,9 +6,11 @@ using Utils;
 
 
 namespace LosingIsFun {
-	class LosingIsFunNPC : GlobalNPC {
+	public class LosingIsFunNPC : GlobalNPC {
 		public override void SetupShop( int type, Chest shop, ref int nextSlot ) {
 			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
 			NPC my_npc = null;
 			IList<NPC> town_npcs = new List<NPC>();
 			string too_close = "";
@@ -85,6 +86,7 @@ namespace LosingIsFun {
 
 		public override void SetDefaults( NPC npc ) {
 			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
 
 			switch( npc.type ) {
 			case 548:   // Eternia Crystal

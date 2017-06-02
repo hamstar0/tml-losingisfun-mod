@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
-using Utils;
+
 
 namespace LosingIsFun.Buffs {
 	public class SorenessDebuff : ModBuff {

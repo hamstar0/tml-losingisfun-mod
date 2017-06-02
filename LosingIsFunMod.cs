@@ -11,6 +11,8 @@ namespace LosingIsFun {
 	public class ConfigurationData {
 		public string VersionSinceUpdate = "";
 
+		public bool Enabled = true;
+
 		public int MinimumTownNpcTileSpacing = 12;
 		public float MinimumRatioTownNPCSolidBlocks = 0.5f;
 
@@ -42,7 +44,7 @@ namespace LosingIsFun {
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 1, 0, 2 );
+		public readonly static Version ConfigVersion = new Version( 1, 0, 3 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 
@@ -60,28 +62,28 @@ namespace LosingIsFun {
 		public override void Load() {
 			if( !this.Config.LoadFile() ) {
 				this.Config.SaveFile();
-			}
+			} else {
+				Version vers_since = this.Config.Data.VersionSinceUpdate != "" ?
+					new Version( this.Config.Data.VersionSinceUpdate ) :
+					new Version();
 
-			Version vers_since = this.Config.Data.VersionSinceUpdate != "" ?
-				new Version( this.Config.Data.VersionSinceUpdate ) :
-				new Version();
+				if( vers_since < LosingIsFunMod.ConfigVersion ) {
+					var new_config = new ConfigurationData();
+					ErrorLogger.Log( "Losing Is Fun config updated to " + LosingIsFunMod.ConfigVersion.ToString() );
 
-			if( vers_since < LosingIsFunMod.ConfigVersion ) {
-				var new_config = new ConfigurationData();
-				ErrorLogger.Log( "Losing Is Fun config updated to " + LosingIsFunMod.ConfigVersion.ToString() );
+					if( vers_since < new Version( 0, 1, 1 ) ) {
+						this.Config.Data.MinimumTownNpcTileSpacing = new_config.MinimumTownNpcTileSpacing;
+					}
+					if( vers_since < new Version( 0, 3, 1 ) ) {
+						this.Config.Data.EvacWarpChargeDurationFrames = new_config.EvacWarpChargeDurationFrames;
+					}
+					if( vers_since < new Version( 1, 0, 2 ) ) {
+						this.Config.Data.LuckyHorseshoeFailChance = new_config.LuckyHorseshoeFailChance;
+					}
 
-				if( vers_since < new Version(0, 1, 1) ) {
-					this.Config.Data.MinimumTownNpcTileSpacing = new_config.MinimumTownNpcTileSpacing;
+					this.Config.Data.VersionSinceUpdate = LosingIsFunMod.ConfigVersion.ToString();
+					this.Config.SaveFile();
 				}
-				if( vers_since < new Version( 0, 3, 1 ) ) {
-					this.Config.Data.EvacWarpChargeDurationFrames = new_config.EvacWarpChargeDurationFrames;
-				}
-				if( vers_since < new Version( 1, 0, 2 ) ) {
-					this.Config.Data.LuckyHorseshoeFailChance = new_config.LuckyHorseshoeFailChance;
-				}
-
-				this.Config.Data.VersionSinceUpdate = LosingIsFunMod.ConfigVersion.ToString();
-				this.Config.SaveFile();
 			}
 
 			SorenessDebuff.LoadTextures( this );
@@ -97,6 +99,8 @@ namespace LosingIsFun {
 		////////////////
 
 		public override void PostDrawInterface( SpriteBatch sb ) {
+			if( !this.Config.Data.Enabled ) { return; }
+
 			DebugHelper.PrintToBatch( sb );
 		}
 	}

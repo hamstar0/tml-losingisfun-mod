@@ -5,10 +5,12 @@ using Terraria.ModLoader;
 namespace LosingIsFun {
 	class LosingIsFunProjectile : GlobalProjectile {
 		public override void AI( Projectile projectile ) {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
 			Player owner = Main.player[projectile.owner];
 
 			if( projectile.owner >= 0 && owner != null && owner.active ) {
-				var mymod = (LosingIsFunMod)this.mod;
 				var info = projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod );
 
 				// Ranged attacks can crit only while player is standing still
@@ -20,12 +22,21 @@ namespace LosingIsFun {
 		}
 		
 		public override void ModifyHitNPC( Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection ) {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
 			this.EvaluateCrit( projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod ), ref crit );
 		}
 		public override void ModifyHitPlayer( Projectile projectile, Player target, ref int damage, ref bool crit ) {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
 			this.EvaluateCrit( projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod ), ref crit );
 		}
 		public override void ModifyHitPvp( Projectile projectile, Player target, ref int damage, ref bool crit ) {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
 			this.EvaluateCrit( projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod ), ref crit );
 		}
 

@@ -6,6 +6,7 @@ namespace LosingIsFun {
 	public class LosingIsFunItem : GlobalItem {
 		public override void SetDefaults( Item item ) {
 			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
 
 			switch( item.type ) {
 			case 949:   // Snowball

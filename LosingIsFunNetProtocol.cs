@@ -10,7 +10,7 @@ namespace LosingIsFun {
 	}
 
 
-	public class LosingIsFunNetProtocol {
+	public static class LosingIsFunNetProtocol {
 		public static void RouteReceivedPackets( LosingIsFunMod mymod, BinaryReader reader ) {
 			TheLunaticNetProtocolTypes protocol = (TheLunaticNetProtocolTypes)reader.ReadByte();
 			bool is_debug = (DebugHelper.DEBUGMODE & 1) > 0;
