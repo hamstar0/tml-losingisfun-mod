@@ -66,10 +66,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Buffs\SorenessDebuff.png" />
+    <Content Include="Buffs\SorenessDebuff_1.png" />
+    <Content Include="Buffs\SorenessDebuff_2.png" />
+    <Content Include="Buffs\SorenessDebuff_3.png" />
+    <Content Include="Buffs\SorenessDebuff_4.png" />
+    <Content Include="Buffs\SorenessDebuff_5.png" />
+    <Content Include="Buffs\SorenessDebuff_6.png" />
+    <Content Include="Buffs\SorenessDebuff_7.png" />
+    <Content Include="Buffs\SorenessDebuff_8.png" />
     <Content Include="build.txt" />
     <Content Include="description.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="LICENSE" />
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"C:\Program Files\Steam\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"</PostBuildEvent>

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
+using Terraria;
 using Terraria.ModLoader;
 using Utils;
 using Utils.JsonConfig;
@@ -86,7 +87,9 @@ namespace LosingIsFun {
 				}
 			}
 
-			SorenessDebuff.LoadTextures( this );
+			if( !Main.dedServ ) {
+				SorenessDebuff.LoadTextures( this );
+			}
 		}
 
 

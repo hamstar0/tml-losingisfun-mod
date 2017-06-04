@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -15,7 +16,7 @@ namespace LosingIsFun.Buffs {
 
 		public static void LoadTextures( LosingIsFunMod mymod ) {
 			for( int i=0; i<SorenessDebuff.Stages; i++ ) {
-				SorenessDebuff.Textures[i] = mymod.GetTexture( "Buffs/SorenessDebuff_"+(i+1) );
+				SorenessDebuff.Textures[i] = mymod.GetTexture( "Buffs/SorenessDebuff_" + (i + 1) );
 			}
 		}
 
