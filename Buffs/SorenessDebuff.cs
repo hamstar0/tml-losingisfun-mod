@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -42,8 +41,9 @@ namespace LosingIsFun.Buffs {
 
 
 		public override void SetDefaults() {
-			Main.buffName[this.Type] = "Soreness";
-			Main.buffTip[this.Type] = "Defense and speed down";
+			this.DisplayName.SetDefault( "Soreness" );
+			this.Description.SetDefault( "Defense and speed down" );
+
 			Main.debuff[this.Type] = true;
 		}
 

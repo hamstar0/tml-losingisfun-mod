@@ -11,7 +11,7 @@ namespace LosingIsFun {
 			Player owner = Main.player[projectile.owner];
 
 			if( projectile.owner >= 0 && owner != null && owner.active ) {
-				var info = projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod );
+				var info = projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod );
 
 				// Ranged attacks can crit only while player is standing still
 				if( info.CanCrit == null ) {
@@ -25,25 +25,25 @@ namespace LosingIsFun {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }
 
-			this.EvaluateCrit( projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod ), ref crit );
+			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
 		}
 		public override void ModifyHitPlayer( Projectile projectile, Player target, ref int damage, ref bool crit ) {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }
 
-			this.EvaluateCrit( projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod ), ref crit );
+			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
 		}
 		public override void ModifyHitPvp( Projectile projectile, Player target, ref int damage, ref bool crit ) {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }
 
-			this.EvaluateCrit( projectile.GetModInfo<LosingIsFunProjectileInfo>( this.mod ), ref crit );
+			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
 		}
 
 
 		////////////////
 
-		private void EvaluateRangedStillness( LosingIsFunMod mymod, Player owner, LosingIsFunProjectileInfo info ) {
+		private void EvaluateRangedStillness( LosingIsFunMod mymod, Player owner, LosingIsFunGlobalProjectileInstanced info ) {
 			if( mymod.Config.Data.RangedCritWithAimOnly ) {
 				Item held_item = owner.inventory[owner.selectedItem];
 
@@ -54,7 +54,7 @@ namespace LosingIsFun {
 			}
 		}
 
-		private void EvaluateCrit( LosingIsFunProjectileInfo info, ref bool crit ) {
+		private void EvaluateCrit( LosingIsFunGlobalProjectileInstanced info, ref bool crit ) {
 			if( info.CanCrit == false ) {
 				crit = false;
 			} else {
@@ -69,12 +69,15 @@ namespace LosingIsFun {
 
 
 
-	class LosingIsFunProjectileInfo : ProjectileInfo {
+	class LosingIsFunGlobalProjectileInstanced : GlobalProjectile {
+		public override bool InstancePerEntity { get { return true; } }
+		public override bool CloneNewInstances { get { return true; } }
+
 		public bool IsRanged;
 		public bool? CanCrit = null;
 
-		public override ProjectileInfo Clone() {
-			var clone = new LosingIsFunProjectileInfo();
+		public override GlobalProjectile Clone() {
+			var clone = new LosingIsFunGlobalProjectileInstanced();
 			clone.IsRanged = this.IsRanged;
 			clone.CanCrit = this.CanCrit;
 			return clone;

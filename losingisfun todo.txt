@@ -12,6 +12,7 @@ v1.2
 v1.1
 -	Nerf Leaf Wings
 -	Crimson spiders have 1/10 chance of dropping Worm Teeth
+-	Add summon item warmup
 
 v1.0.2
 -	Fix recall warning spam

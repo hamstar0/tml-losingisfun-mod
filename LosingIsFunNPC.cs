@@ -1,8 +1,8 @@
-﻿using System;
+﻿using HamstarHelpers.TileHelpers;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
-using Utils;
 
 
 namespace LosingIsFun {
@@ -35,7 +35,7 @@ namespace LosingIsFun {
 					double dist = Math.Sqrt( (x_dist * x_dist) + (y_dist * y_dist) );
 
 					if( dist <= mymod.Config.Data.MinimumTownNpcTileSpacing ) {
-						too_close = npc.name;
+						too_close = npc.TypeName;
 						break;
 					}
 				}
@@ -48,10 +48,12 @@ namespace LosingIsFun {
 					int min_y = 40;
 					for( int i = my_npc.homeTileX - (min_x / 2); i < my_npc.homeTileX + (min_x / 2); i++ ) {
 						for( int j = my_npc.homeTileY; j < my_npc.homeTileY + min_y; j++ ) {
-							if( TileHelper.IsAir(i, j) ) { continue; }
-							else if( Main.tile[i, j].wall > 0 ) {
+							Tile tile = Main.tile[i, j];
+							if( tile == null || TileHelpers.IsAir( tile ) ) { continue; }
+
+							else if( tile.wall > 0 ) {
 								walls++;
-							} else if( TileHelper.IsSolid(i, j, true, true) ) {
+							} else if( TileHelpers.IsSolid( tile, true, true) ) {
 								solids++;
 							}
 						}
@@ -67,16 +69,16 @@ namespace LosingIsFun {
 
 			if( too_close != "" || too_high ) {
 				if( too_close != "" ) {
-					Main.NewText( my_npc.displayName + " the " + my_npc.name + " is housed too close to the " + too_close + " to setup shop!", Main.errorColor );
+					Main.NewText( my_npc.GivenName + " the " + my_npc.TypeName + " is housed too close to the " + too_close + " to setup shop!", Main.errorColor );
 				} else if( too_high ) {
-					Main.NewText( my_npc.displayName + " the " + my_npc.name + " is housed too high to setup shop!", Main.errorColor );
+					Main.NewText( my_npc.GivenName + " the " + my_npc.TypeName + " is housed too high to setup shop!", Main.errorColor );
 				}
 
 				for( int i = nextSlot - 1; i >= 0; i-- ) {
 					if( shop.item[i] != null && !shop.item[i].IsAir ) {
 						shop.item[i].active = false;
 						shop.item[i].type = 0;
-						shop.item[i].name = "";
+						//shop.item[i].name = "";
 						shop.item[i].stack = 0;
 					}
 				}

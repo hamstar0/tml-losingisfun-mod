@@ -1,11 +1,10 @@
-﻿using LosingIsFun.Buffs;
+﻿using HamstarHelpers.Utilities.Config;
+using LosingIsFun.Buffs;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
-using Utils;
-using Utils.JsonConfig;
 
 
 namespace LosingIsFun {
@@ -45,7 +44,7 @@ namespace LosingIsFun {
 
 
 	public class LosingIsFunMod : Mod {
-		public readonly static Version ConfigVersion = new Version( 1, 0, 3 );
+		public readonly static Version ConfigVersion = new Version( 1, 0, 4 );
 		public JsonConfig<ConfigurationData> Config { get; private set; }
 
 
@@ -97,14 +96,6 @@ namespace LosingIsFun {
 
 		public override void HandlePacket( BinaryReader reader, int whoAmI ) {
 			LosingIsFunNetProtocol.RouteReceivedPackets( this, reader );
-		}
-
-		////////////////
-
-		public override void PostDrawInterface( SpriteBatch sb ) {
-			if( !this.Config.Data.Enabled ) { return; }
-
-			DebugHelper.PrintToBatch( sb );
 		}
 	}
 }

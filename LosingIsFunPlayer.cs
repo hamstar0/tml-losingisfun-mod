@@ -1,9 +1,10 @@
-﻿using LosingIsFun.Buffs;
+﻿using HamstarHelpers.ItemHelpers;
+using HamstarHelpers.PlayerHelpers;
+using LosingIsFun.Buffs;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Utils;
 
 
 namespace LosingIsFun {
@@ -84,7 +85,7 @@ namespace LosingIsFun {
 
 							if( this.player.itemAnimation == 0 ) {
 								if( use_item.type == 2350 ) {   // Recall Potion
-									ItemHelper.ReduceStack( use_item, 1 );
+									ItemHelpers.ReduceStack( use_item, 1 );
 									this.EvacTimer += 30;   // Speed up warp by 0.5 seconds for Recall Potion
 								}
 								this.EvacInUse = true;
@@ -115,7 +116,7 @@ namespace LosingIsFun {
 			if( !mymod.Config.Data.Enabled ) { return; }
 
 			// Detect nurse use + add soreness
-			if( PlayerHelper.HasUsedNurse( this.player ) ) {
+			if( PlayerHelpers.HasUsedNurse( this.player ) ) {
 				if( !this.IsUsingNurse ) {
 					this.IsUsingNurse = true;
 					SorenessDebuff.GiveTo( this );
@@ -149,7 +150,11 @@ namespace LosingIsFun {
 
 			// Apply soreness defense debuff (cannot use PreUpdateBuffs, PostUpdateBuffs, or ModBuff.Update for some reason)
 			if( this.Soreness > 0 ) {
-				SorenessDebuff.ApplyDefenselessness( (LosingIsFunMod)this.mod, this.player, this.Soreness );
+				if( this.player.FindBuffIndex(mymod.BuffType<SorenessDebuff>()) == -1 ) {
+					this.Soreness = 0;
+				} else {
+					SorenessDebuff.ApplyDefenselessness( (LosingIsFunMod)this.mod, this.player, this.Soreness );
+				}
 			}
 		}
 
@@ -170,7 +175,7 @@ namespace LosingIsFun {
 			if( !mymod.Config.Data.Enabled ) { return; }
 
 			if( this.player.controlUseItem && this.player.itemTime > 1 ) {
-				if( ItemClassifications.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
+				if( ItemIdentityHelpers.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
 					var fric = mymod.Config.Data.YoyoMoveSpeedClamp;
 
 					if( this.player.velocity.X > fric ) {
@@ -206,7 +211,7 @@ namespace LosingIsFun {
 			Dust.NewDust( this.player.position, this.player.width, this.player.height, 15, 0, 0, 150, Color.Cyan, 1.2f );
 
 			if( this.EvacTimer > duration ) {
-				PlayerHelper.Evac( this.player );
+				PlayerHelpers.Evac( this.player );
 				this.EvacTimer = 0;
 				return false;
 			}

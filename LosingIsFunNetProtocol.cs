@@ -1,31 +1,32 @@
-﻿using System.IO;
+﻿using HamstarHelpers.MiscHelpers;
+using System.IO;
 using Terraria;
 using Terraria.ModLoader;
-using Utils;
+
 
 namespace LosingIsFun {
 	public enum TheLunaticNetProtocolTypes : byte {
-		SendRequestModSettings,
-		SendModSettings
+		RequestModSettings,
+		ModSettings
 	}
 
 
 	public static class LosingIsFunNetProtocol {
 		public static void RouteReceivedPackets( LosingIsFunMod mymod, BinaryReader reader ) {
 			TheLunaticNetProtocolTypes protocol = (TheLunaticNetProtocolTypes)reader.ReadByte();
-			bool is_debug = (DebugHelper.DEBUGMODE & 1) > 0;
+			//bool is_debug = (DebugHelper.DEBUGMODE & 1) > 0;
 
 			switch( protocol ) {
-			case TheLunaticNetProtocolTypes.SendRequestModSettings:
-				if( is_debug ) { DebugHelper.Log( "SendRequestModSettings" ); }
+			case TheLunaticNetProtocolTypes.RequestModSettings:
+				//if( is_debug ) { DebugHelper.Log( "SendRequestModSettings" ); }
 				LosingIsFunNetProtocol.ReceiveModSettingsRequestOnServer( mymod, reader );
 				break;
-			case TheLunaticNetProtocolTypes.SendModSettings:
-				if( is_debug ) { DebugHelper.Log( "SendModSettings" ); }
+			case TheLunaticNetProtocolTypes.ModSettings:
+				//if( is_debug ) { DebugHelper.Log( "SendModSettings" ); }
 				LosingIsFunNetProtocol.ReceiveModSettingsOnClient( mymod, reader );
 				break;
 			default:
-				DebugHelper.Log( "Invalid packet protocol: " + protocol );
+				DebugHelpers.Log( "Invalid packet protocol: " + protocol );
 				break;
 			}
 		}
@@ -42,7 +43,7 @@ namespace LosingIsFun {
 
 			ModPacket packet = mod.GetPacket();
 
-			packet.Write( (byte)TheLunaticNetProtocolTypes.SendRequestModSettings );
+			packet.Write( (byte)TheLunaticNetProtocolTypes.RequestModSettings );
 			packet.Write( (int)Main.myPlayer );
 
 			packet.Send();
@@ -59,7 +60,7 @@ namespace LosingIsFun {
 			
 			ModPacket packet = mymod.GetPacket();
 
-			packet.Write( (byte)TheLunaticNetProtocolTypes.SendModSettings );
+			packet.Write( (byte)TheLunaticNetProtocolTypes.ModSettings );
 			packet.Write( (string)mymod.Config.SerializeMe() );
 			
 			packet.Send( (int)player.whoAmI );
@@ -91,7 +92,7 @@ namespace LosingIsFun {
 			int player_who = reader.ReadInt32();
 
 			if( player_who < 0 || player_who >= Main.player.Length || Main.player[player_who] == null ) {
-				DebugHelper.Log( "LosingIsFunNetProtocol.ReceiveRequestModSettingsOnServer - Invalid player id " + player_who );
+				DebugHelpers.Log( "LosingIsFunNetProtocol.ReceiveRequestModSettingsOnServer - Invalid player id " + player_who );
 				return;
 			}
 
