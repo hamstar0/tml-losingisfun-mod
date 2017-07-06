@@ -1,7 +1,9 @@
-﻿using HamstarHelpers.TileHelpers;
+﻿using HamstarHelpers.ItemHelpers;
+using HamstarHelpers.TileHelpers;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -94,6 +96,26 @@ namespace LosingIsFun {
 			case 548:   // Eternia Crystal
 				if( mymod.Config.Data.EterniaCrystalAntiHoik ) {
 					npc.noGravity = true;
+				}
+				break;
+			}
+		}
+
+
+		public override void NPCLoot( NPC npc ) {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
+			switch( npc.type ) {
+			case NPCID.Crimera:
+			case NPCID.BloodCrawler:
+			case NPCID.FaceMonster:
+				float chance = mymod.Config.Data.CrimsonMobsWormToothDropChance;
+
+				if( chance >= 0 && Main.rand.NextFloat() <= chance ) {
+					var item = new Item();
+					item.SetDefaults( ItemID.WormTooth );
+					ItemHelpers.CreateItem( npc.position, item.type, 1, item.width, item.height );
 				}
 				break;
 			}

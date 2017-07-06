@@ -55,7 +55,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffs\BuckedDebuff.cs" />
     <Compile Include="Buffs\SorenessDebuff.cs" />
+    <Compile Include="ConfigDefaults.cs" />
     <Compile Include="LosingIsFunItem.cs" />
     <Compile Include="LosingIsFunMod.cs" />
     <Compile Include="LosingIsFunNetProtocol.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Buffs\BuckedDebuff.png" />
     <Content Include="Buffs\SorenessDebuff.png" />
     <Content Include="Buffs\SorenessDebuff_1.png" />
     <Content Include="Buffs\SorenessDebuff_2.png" />

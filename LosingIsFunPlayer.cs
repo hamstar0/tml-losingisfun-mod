@@ -1,7 +1,11 @@
-﻿using HamstarHelpers.ItemHelpers;
+﻿using HamstarHelpers.HudHelpers;
+using HamstarHelpers.ItemHelpers;
+using HamstarHelpers.MiscHelpers;
 using HamstarHelpers.PlayerHelpers;
+using HamstarHelpers.UIHelpers;
 using LosingIsFun.Buffs;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -10,12 +14,14 @@ using Terraria.ModLoader.IO;
 namespace LosingIsFun {
 	public class LosingIsFunPlayer : ModPlayer {
 		public int Soreness = 0;
+		public int MountHp = 1;
 
 		private int EvacTimer = 0;
 		private bool EvacInUse = false;
 		private bool IsUsingNurse = false;
 		private int GravChangeDelay = 0;
 		private float PrevGravDir = 1f;
+		private int MountHpRegenTimer = 0;
 
 
 		////////////////
@@ -25,11 +31,13 @@ namespace LosingIsFun {
 			var myclone = (LosingIsFunPlayer)clone;
 
 			myclone.Soreness = this.Soreness;
+			myclone.MountHp = this.MountHp;
 			myclone.EvacTimer = this.EvacTimer;
 			myclone.EvacInUse = this.EvacInUse;
 			myclone.IsUsingNurse = this.IsUsingNurse;
 			myclone.GravChangeDelay = this.GravChangeDelay;
 			myclone.PrevGravDir = this.PrevGravDir;
+			myclone.MountHpRegenTimer = this.MountHpRegenTimer;
 		}
 
 		public override void OnEnterWorld( Player player ) {
@@ -59,7 +67,53 @@ namespace LosingIsFun {
 		}
 
 
+
 		////////////////
+
+		public static readonly PlayerLayer MountHpBarLayer = new PlayerLayer(
+			"LosingIsFun", "MountHpBar", PlayerLayer.MiscEffectsFront,
+			delegate ( PlayerDrawInfo draw_info ) {
+				Player player = draw_info.drawPlayer;
+				var modplayer = player.GetModPlayer<LosingIsFunPlayer>();
+				var mymod = (LosingIsFunMod)modplayer.mod;
+				int hp = modplayer.MountHp;
+				int max_hp = mymod.Config.Data.MountMaxHp;
+				if( hp == max_hp ) { return; }
+
+				float x = player.position.X + (player.width / 2);
+				float y = player.position.Y + 64;
+				var pos = UIHelpers.ConvertToScreenPosition( new Vector2(x, y) );
+
+				HealthBarHelpers.DrawHealthBar( Main.spriteBatch, pos.X, pos.Y, hp, max_hp, Color.White, 1f );
+
+			}
+		);
+
+		public override void ModifyDrawLayers( List<PlayerLayer> layers ) {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
+			LosingIsFunPlayer.MountHpBarLayer.visible = this.player.mount.Active;
+			layers.Add( LosingIsFunPlayer.MountHpBarLayer );
+		}
+
+
+
+		////////////////
+
+		public override void PostHurt( bool pvp, bool quiet, double damage, int hitDirection, bool crit ) {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
+			if( !quiet && this.player.mount.Active ) {
+				this.MountHpRegenTimer = mymod.Config.Data.MountHpRegenRate;
+				if( this.MountHp > 0 ) { this.MountHp--; }
+
+				if( this.MountHp == 0 ) {
+					this.player.AddBuff( mymod.BuffType<BuckedDebuff>(), mymod.Config.Data.MountEjectDebuffTime );
+				}
+			}
+		}
 
 		public override bool PreItemCheck() {
 			var mymod = (LosingIsFunMod)this.mod;
@@ -141,6 +195,16 @@ namespace LosingIsFun {
 					}
 				}
 			}
+
+			// Add HP bar for mount
+			if( this.MountHpRegenTimer > 0 ) {
+				this.MountHpRegenTimer--;
+			} else {
+				if( this.MountHp < mymod.Config.Data.MountMaxHp ) {
+					this.MountHp++;
+					this.MountHpRegenTimer = mymod.Config.Data.MountHpRegenRate;
+				}
+			}
 		}
 
 
@@ -170,6 +234,16 @@ namespace LosingIsFun {
 		}
 
 
+		public override void PostUpdateEquips() {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
+			if( this.player.wings == 13 && mymod.Config.Data.LeafWingsTime >= 0 ) {
+				this.player.wingTimeMax = mymod.Config.Data.LeafWingsTime;
+			}
+		}
+
+
 		public override void PostUpdateRunSpeeds() {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }
@@ -188,6 +262,23 @@ namespace LosingIsFun {
 
 			if( this.Soreness > 0 ) {
 				SorenessDebuff.ApplyLameness( mymod, this.player, this.Soreness );
+			}
+		}
+
+
+		public override void UpdateDead() {
+			var mymod = (LosingIsFunMod)this.mod;
+			if( !mymod.Config.Data.Enabled ) { return; }
+
+			// No respawns during bosses
+			if( this.player.respawnTimer > 0 && mymod.Config.Data.NoRespawnDuringBosses ) {
+				for( int i=0; i<Main.npc.Length; i++ ) {
+					NPC npc = Main.npc[i];
+					if( npc != null && npc.active && npc.boss ) {
+						this.player.respawnTimer++;
+						break;
+					}
+				}
 			}
 		}
 

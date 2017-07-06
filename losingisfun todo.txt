@@ -9,11 +9,17 @@ Scrapped or deferred
 v1.2
 -	Buff EoW + Destroyer (segments get added defense)
 -	Slime mount can only stomp 3x in rapid succession
-v1.1
--	Nerf Leaf Wings
--	Crimson spiders have 1/10 chance of dropping Worm Teeth
+-	Set player velocity to add to melee and thrown projectile velocity and damage
 -	Add summon item warmup
 
+v1.1
+-	Crimson mobs have 1/20 chance of dropping Worm Teeth
+-	No respawns during boss fights
+-	Nerf Leaf Wings (reduce flight time)
+-	Add hp bar for mounts (5 hits = 12 second KO)
+-	Set bullets to be expensive
+-	Nerf Chlorophyte Shot
+-	Refactor config file to use its own class
 v1.0.2
 -	Fix recall warning spam
 -	Reduce chance of fall death with lucky horseshoe
