@@ -2,9 +2,12 @@
 
 
 namespace LosingIsFun {
-	public class ConfigurationData {
+	public class LosingIsFunConfigData {
 		public readonly static Version CurrentVersion = new Version( 1, 1, 0 );
+		public readonly static string ConfigFileName = "Losing Is Fun Config.json";
 
+
+		////////////////
 
 		public string VersionSinceUpdate = "";
 
@@ -55,38 +58,40 @@ namespace LosingIsFun {
 		////////////////
 
 		public bool UpdateToLatestVersion() {
-			var new_config = new ConfigurationData();
+			var new_config = new LosingIsFunConfigData();
 			var vers_since = this.VersionSinceUpdate != "" ?
 				new Version( this.VersionSinceUpdate ) :
 				new Version();
 
-			if( vers_since >= ConfigurationData.CurrentVersion ) {
+			if( vers_since >= LosingIsFunConfigData.CurrentVersion ) {
 				return false;
 			}
 
 			if( vers_since < new Version( 0, 1, 1 ) ) {
-				if( ConfigurationData._0_1_0_MinimumTownNpcTileSpacing == this.MinimumTownNpcTileSpacing ) {
+				if( LosingIsFunConfigData._0_1_0_MinimumTownNpcTileSpacing == this.MinimumTownNpcTileSpacing ) {
 					this.MinimumTownNpcTileSpacing = new_config.MinimumTownNpcTileSpacing;
 				}
 			}
 			if( vers_since < new Version( 0, 3, 1 ) ) {
-				if( ConfigurationData._0_3_0_EvacWarpChargeDurationFrames == this.EvacWarpChargeDurationFrames ) {
+				if( LosingIsFunConfigData._0_3_0_EvacWarpChargeDurationFrames == this.EvacWarpChargeDurationFrames ) {
 					this.EvacWarpChargeDurationFrames = new_config.EvacWarpChargeDurationFrames;
 				}
 			}
 			if( vers_since < new Version( 1, 0, 2 ) ) {
-				if( ConfigurationData._1_0_1_LuckyHorseshoeFailChance == this.LuckyHorseshoeFailChance ) {
+				if( LosingIsFunConfigData._1_0_1_LuckyHorseshoeFailChance == this.LuckyHorseshoeFailChance ) {
 					this.LuckyHorseshoeFailChance = new_config.LuckyHorseshoeFailChance;
 				}
 			}
 
-			this.VersionSinceUpdate = ConfigurationData.CurrentVersion.ToString();
+			this.VersionSinceUpdate = LosingIsFunConfigData.CurrentVersion.ToString();
 
 			return true;
 		}
 
 
 		////////////////
+
+		public string _OLD_SETTINGS_BELOW = "";
 
 		public readonly static float _1_0_1_LuckyHorseshoeFailChance = 0.35f;
 		public readonly static int _0_3_0_EvacWarpChargeDurationFrames = (int)(3.5f * 60f);

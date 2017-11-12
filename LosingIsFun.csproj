@@ -58,12 +58,14 @@
     <Compile Include="Buffs\BuckedDebuff.cs" />
     <Compile Include="Buffs\SorenessDebuff.cs" />
     <Compile Include="ConfigDefaults.cs" />
-    <Compile Include="LosingIsFunItem.cs" />
+    <Compile Include="MyGlobalItem.cs" />
     <Compile Include="LosingIsFunMod.cs" />
-    <Compile Include="LosingIsFunNetProtocol.cs" />
-    <Compile Include="LosingIsFunNPC.cs" />
-    <Compile Include="LosingIsFunPlayer.cs" />
-    <Compile Include="LosingIsFunProjectile.cs" />
+    <Compile Include="MyGlobalNPC.cs" />
+    <Compile Include="MyPlayer.cs" />
+    <Compile Include="MyGlobalProjectile.cs" />
+    <Compile Include="NetProtocol\ClientPacketHandlers.cs" />
+    <Compile Include="NetProtocol\NetProtocolTypes.cs" />
+    <Compile Include="NetProtocol\ServerPacketHandlers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +81,7 @@
     <Content Include="Buffs\SorenessDebuff_8.png" />
     <Content Include="build.txt" />
     <Content Include="description.txt" />
+    <Content Include="icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE" />

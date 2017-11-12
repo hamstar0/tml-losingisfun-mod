@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 
 namespace LosingIsFun {
-	public class LosingIsFunNPC : GlobalNPC {
+	public class MyGlobalNPC : GlobalNPC {
 		public override void SetupShop( int type, Chest shop, ref int nextSlot ) {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }

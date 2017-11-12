@@ -1,9 +1,9 @@
 ﻿using HamstarHelpers.HudHelpers;
 using HamstarHelpers.ItemHelpers;
-using HamstarHelpers.MiscHelpers;
 using HamstarHelpers.PlayerHelpers;
 using HamstarHelpers.UIHelpers;
 using LosingIsFun.Buffs;
+using LosingIsFun.NetProtocol;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
@@ -12,7 +12,7 @@ using Terraria.ModLoader.IO;
 
 
 namespace LosingIsFun {
-	public class LosingIsFunPlayer : ModPlayer {
+	public class MyPlayer : ModPlayer {
 		public int Soreness = 0;
 		public int MountHp = 1;
 
@@ -28,7 +28,7 @@ namespace LosingIsFun {
 
 		public override void clientClone( ModPlayer clone ) {
 			base.clientClone( clone );
-			var myclone = (LosingIsFunPlayer)clone;
+			var myclone = (MyPlayer)clone;
 
 			myclone.Soreness = this.Soreness;
 			myclone.MountHp = this.MountHp;
@@ -50,7 +50,7 @@ namespace LosingIsFun {
 				}
 
 				if( Main.netMode == 1 ) {   // Client
-					LosingIsFunNetProtocol.SendModSettingsRequestFromClient( this.mod );
+					ClientPacketHandlers.SendModSettingsRequestFromClient( this.mod );
 				}
 			}
 		}
@@ -74,7 +74,7 @@ namespace LosingIsFun {
 			"LosingIsFun", "MountHpBar", PlayerLayer.MiscEffectsFront,
 			delegate ( PlayerDrawInfo draw_info ) {
 				Player player = draw_info.drawPlayer;
-				var modplayer = player.GetModPlayer<LosingIsFunPlayer>();
+				var modplayer = player.GetModPlayer<MyPlayer>();
 				var mymod = (LosingIsFunMod)modplayer.mod;
 				int hp = modplayer.MountHp;
 				int max_hp = mymod.Config.Data.MountMaxHp;
@@ -84,7 +84,7 @@ namespace LosingIsFun {
 				float y = player.position.Y + 64;
 				var pos = UIHelpers.ConvertToScreenPosition( new Vector2(x, y) );
 
-				HealthBarHelpers.DrawHealthBar( Main.spriteBatch, pos.X, pos.Y, hp, max_hp, Color.White, 1f );
+				HudHealthBarHelpers.DrawHealthBar( Main.spriteBatch, pos.X, pos.Y, hp, max_hp, Color.White, 1f );
 
 			}
 		);
@@ -93,8 +93,8 @@ namespace LosingIsFun {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }
 
-			LosingIsFunPlayer.MountHpBarLayer.visible = this.player.mount.Active;
-			layers.Add( LosingIsFunPlayer.MountHpBarLayer );
+			MyPlayer.MountHpBarLayer.visible = this.player.mount.Active;
+			layers.Add( MyPlayer.MountHpBarLayer );
 		}
 
 
@@ -170,7 +170,7 @@ namespace LosingIsFun {
 			if( !mymod.Config.Data.Enabled ) { return; }
 
 			// Detect nurse use + add soreness
-			if( PlayerHelpers.HasUsedNurse( this.player ) ) {
+			if( PlayerNPCHelpers.HasUsedNurse( this.player ) ) {
 				if( !this.IsUsingNurse ) {
 					this.IsUsingNurse = true;
 					SorenessDebuff.GiveTo( this );

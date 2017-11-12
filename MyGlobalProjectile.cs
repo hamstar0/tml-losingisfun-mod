@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 
 namespace LosingIsFun {
-	class LosingIsFunProjectile : GlobalProjectile {
+	class MyGlobalProjectile : GlobalProjectile {
 		public override void AI( Projectile projectile ) {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }

@@ -1,5 +1,7 @@
 ﻿using HamstarHelpers.Utilities.Config;
 using LosingIsFun.Buffs;
+using LosingIsFun.NetProtocol;
+using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
@@ -7,8 +9,30 @@ using Terraria.ModLoader;
 
 namespace LosingIsFun {
 	public class LosingIsFunMod : Mod {
-		public JsonConfig<ConfigurationData> Config { get; private set; }
+		public static string GithubUserName { get { return "hamstar0"; } }
+		public static string GithubProjectName { get { return "tml-losingisfun-mod"; } }
 
+		public static string ConfigRelativeFilePath {
+			get { return ConfigurationDataBase.RelativePath + Path.DirectorySeparatorChar + LosingIsFunConfigData.ConfigFileName; }
+		}
+		public static void ReloadConfigFromFile() {
+			if( Main.netMode != 0 ) {
+				throw new Exception( "Cannot reload configs outside of single player." );
+			}
+			if( LosingIsFunMod.Instance != null ) {
+				LosingIsFunMod.Instance.Config.LoadFile();
+			}
+		}
+
+		public static LosingIsFunMod Instance { get; private set; }
+
+
+		////////////////
+
+		public JsonConfig<LosingIsFunConfigData> Config { get; private set; }
+
+
+		////////////////
 
 		public LosingIsFunMod() {
 			this.Properties = new ModProperties() {
@@ -16,12 +40,16 @@ namespace LosingIsFun {
 				AutoloadGores = true,
 				AutoloadSounds = true
 			};
-
-			string filename = "Losing Is Fun Config.json";
-			this.Config = new JsonConfig<ConfigurationData>( filename, "Mod Configs", new ConfigurationData() );
+			
+			this.Config = new JsonConfig<LosingIsFunConfigData>( LosingIsFunConfigData.ConfigFileName,
+				ConfigurationDataBase.RelativePath, new LosingIsFunConfigData() );
 		}
 
+		////////////////
+
 		public override void Load() {
+			LosingIsFunMod.Instance = this;
+
 			this.LoadConfig();
 
 			if( !Main.dedServ ) {
@@ -35,16 +63,24 @@ namespace LosingIsFun {
 			}
 
 			if( this.Config.Data.UpdateToLatestVersion() ) {
-				ErrorLogger.Log( "Losing Is Fun updated to " + ConfigurationData.CurrentVersion.ToString() );
+				ErrorLogger.Log( "Losing Is Fun updated to " + LosingIsFunConfigData.CurrentVersion.ToString() );
 				this.Config.SaveFile();
 			}
+		}
+
+		public override void Unload() {
+			LosingIsFunMod.Instance = null;
 		}
 
 
 		////////////////
 
-		public override void HandlePacket( BinaryReader reader, int whoAmI ) {
-			LosingIsFunNetProtocol.RouteReceivedPackets( this, reader );
+		public override void HandlePacket( BinaryReader reader, int player_who ) {
+			if( Main.netMode == 1 ) {   // Client
+				ClientPacketHandlers.HandlePacket( this, reader );
+			} else if( Main.netMode == 2 ) {    // Server
+				ServerPacketHandlers.HandlePacket( this, reader, player_who );
+			}
 		}
 	}
 }
