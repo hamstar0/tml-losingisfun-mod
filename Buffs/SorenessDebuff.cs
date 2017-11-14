@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 
 namespace LosingIsFun.Buffs {
-	public class SorenessDebuff : ModBuff {
+	class SorenessDebuff : ModBuff {
 		public static int Stages = 8;
 		public static Texture2D[] Textures { get; private set; }
 

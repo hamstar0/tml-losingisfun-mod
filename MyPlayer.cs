@@ -12,7 +12,7 @@ using Terraria.ModLoader.IO;
 
 
 namespace LosingIsFun {
-	public class MyPlayer : ModPlayer {
+	class MyPlayer : ModPlayer {
 		public int Soreness = 0;
 		public int MountHp = 1;
 

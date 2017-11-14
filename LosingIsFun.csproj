@@ -55,14 +55,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API.cs" />
     <Compile Include="Buffs\BuckedDebuff.cs" />
     <Compile Include="Buffs\SorenessDebuff.cs" />
     <Compile Include="ConfigDefaults.cs" />
-    <Compile Include="MyGlobalItem.cs" />
+    <Compile Include="MyItem.cs" />
     <Compile Include="LosingIsFunMod.cs" />
-    <Compile Include="MyGlobalNPC.cs" />
+    <Compile Include="MyNPC.cs" />
     <Compile Include="MyPlayer.cs" />
-    <Compile Include="MyGlobalProjectile.cs" />
+    <Compile Include="MyProjectile.cs" />
     <Compile Include="NetProtocol\ClientPacketHandlers.cs" />
     <Compile Include="NetProtocol\NetProtocolTypes.cs" />
     <Compile Include="NetProtocol\ServerPacketHandlers.cs" />

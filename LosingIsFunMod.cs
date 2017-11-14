@@ -8,7 +8,9 @@ using Terraria.ModLoader;
 
 
 namespace LosingIsFun {
-	public class LosingIsFunMod : Mod {
+	class LosingIsFunMod : Mod {
+		public static LosingIsFunMod Instance { get; private set; }
+
 		public static string GithubUserName { get { return "hamstar0"; } }
 		public static string GithubProjectName { get { return "tml-losingisfun-mod"; } }
 
@@ -23,8 +25,6 @@ namespace LosingIsFun {
 				LosingIsFunMod.Instance.Config.LoadFile();
 			}
 		}
-
-		public static LosingIsFunMod Instance { get; private set; }
 
 
 		////////////////

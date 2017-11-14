@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 
 namespace LosingIsFun {
-	public class MyGlobalItem : GlobalItem {
+	class MyItem : GlobalItem {
 		public override void SetDefaults( Item item ) {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Data.Enabled ) { return; }
