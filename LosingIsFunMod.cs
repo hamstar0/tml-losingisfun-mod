@@ -21,9 +21,7 @@ namespace LosingIsFun {
 			if( Main.netMode != 0 ) {
 				throw new Exception( "Cannot reload configs outside of single player." );
 			}
-			if( LosingIsFunMod.Instance != null ) {
-				LosingIsFunMod.Instance.Config.LoadFile();
-			}
+			LosingIsFunMod.Instance.Config.LoadFile();
 		}
 
 
