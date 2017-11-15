@@ -50,6 +50,12 @@ namespace LosingIsFun {
 		public override void Load() {
 			LosingIsFunMod.Instance = this;
 
+			var hamhelpmod = ModLoader.GetMod( "HamstarHelpers" );
+			var min_ver = new Version( 1, 2, 0 );
+			if( hamhelpmod.Version < min_ver ) {
+				throw new Exception( "Hamstar Helpers must be version " + min_ver.ToString() + " or greater." );
+			}
+
 			this.LoadConfig();
 
 			if( !Main.dedServ ) {
