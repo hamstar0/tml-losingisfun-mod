@@ -67,7 +67,7 @@ namespace LosingIsFun {
 			}
 
 			if( this.Config.Data.UpdateToLatestVersion() ) {
-				ErrorLogger.Log( "Losing Is Fun updated to " + LosingIsFunConfigData.CurrentVersion.ToString() );
+				ErrorLogger.Log( "Losing Is Fun updated to " + LosingIsFunConfigData.ConfigVersion.ToString() );
 				this.Config.SaveFile();
 			}
 		}

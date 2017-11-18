@@ -3,7 +3,7 @@
 
 namespace LosingIsFun {
 	public class LosingIsFunConfigData {
-		public readonly static Version CurrentVersion = new Version( 1, 1, 0 );
+		public readonly static Version ConfigVersion = new Version( 1, 1, 0 );
 		public readonly static string ConfigFileName = "Losing Is Fun Config.json";
 
 
@@ -63,7 +63,7 @@ namespace LosingIsFun {
 				new Version( this.VersionSinceUpdate ) :
 				new Version();
 
-			if( vers_since >= LosingIsFunConfigData.CurrentVersion ) {
+			if( vers_since >= LosingIsFunConfigData.ConfigVersion ) {
 				return false;
 			}
 
@@ -83,7 +83,7 @@ namespace LosingIsFun {
 				}
 			}
 
-			this.VersionSinceUpdate = LosingIsFunConfigData.CurrentVersion.ToString();
+			this.VersionSinceUpdate = LosingIsFunConfigData.ConfigVersion.ToString();
 
 			return true;
 		}
