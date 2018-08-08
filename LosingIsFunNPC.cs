@@ -1,5 +1,5 @@
-﻿using HamstarHelpers.ItemHelpers;
-using HamstarHelpers.TileHelpers;
+﻿using HamstarHelpers.Helpers.ItemHelpers;
+using HamstarHelpers.Helpers.TileHelpers;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -8,10 +8,10 @@ using Terraria.ModLoader;
 
 
 namespace LosingIsFun {
-	class MyNPC : GlobalNPC {
+	class LosingIsFunNPC : GlobalNPC {
 		public override void SetupShop( int type, Chest shop, ref int nextSlot ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			NPC my_npc = null;
 			IList<NPC> town_npcs = new List<NPC>();
@@ -36,7 +36,7 @@ namespace LosingIsFun {
 					int y_dist = Math.Abs( my_npc.homeTileY - npc.homeTileY );
 					double dist = Math.Sqrt( (x_dist * x_dist) + (y_dist * y_dist) );
 
-					if( dist <= mymod.Config.Data.MinimumTownNpcTileSpacing ) {
+					if( dist <= mymod.ConfigJson.Data.MinimumTownNpcTileSpacing ) {
 						too_close = npc.TypeName;
 						break;
 					}
@@ -63,7 +63,7 @@ namespace LosingIsFun {
 
 					// +1/2 solid needed
 //DebugHelper.Display["tiles"] = "walls "+walls+", solids "+solids+" = "+(walls+solids)+" < "+((float)((min_x + 1) * min_y) * mymod.Config.Data.MinimumRatioTownNPCSolidBlocks);
-					if( (solids+walls) < (float)((min_x + 1) * min_y) * mymod.Config.Data.MinimumRatioTownNPCSolidBlocks ) {
+					if( (solids+walls) < (float)((min_x + 1) * min_y) * mymod.ConfigJson.Data.MinimumRatioTownNPCSolidBlocks ) {
 						too_high = true;
 					}
 				}
@@ -90,11 +90,11 @@ namespace LosingIsFun {
 
 		public override void SetDefaults( NPC npc ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			switch( npc.type ) {
 			case 548:   // Eternia Crystal
-				if( mymod.Config.Data.EterniaCrystalAntiHoik ) {
+				if( mymod.ConfigJson.Data.EterniaCrystalAntiHoik ) {
 					npc.noGravity = true;
 				}
 				break;
@@ -104,13 +104,13 @@ namespace LosingIsFun {
 
 		public override void NPCLoot( NPC npc ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			switch( npc.type ) {
 			case NPCID.Crimera:
 			case NPCID.BloodCrawler:
 			case NPCID.FaceMonster:
-				float chance = mymod.Config.Data.CrimsonMobsWormToothDropChance;
+				float chance = mymod.ConfigJson.Data.CrimsonMobsWormToothDropChance;
 
 				if( chance >= 0 && Main.rand.NextFloat() <= chance ) {
 					var item = new Item();

@@ -19,15 +19,15 @@ namespace LosingIsFun.Buffs {
 			}
 		}
 
-		public static void UpdateIcon( MyPlayer myplayer ) {
+		public static void UpdateIcon( LosingIsFunPlayer myplayer ) {
 			LosingIsFunMod mymod = (LosingIsFunMod)myplayer.mod;
 			int buff_type = mymod.BuffType<SorenessDebuff>();
 			Main.buffTexture[buff_type] = SorenessDebuff.Textures[myplayer.Soreness - 1];
 		}
 
-		public static void GiveTo( MyPlayer myplayer ) {
+		public static void GiveTo( LosingIsFunPlayer myplayer ) {
 			LosingIsFunMod mymod = (LosingIsFunMod)myplayer.mod;
-			int duration = mymod.Config.Data.SorenessDurationSeconds * 60;
+			int duration = mymod.ConfigJson.Data.SorenessDurationSeconds * 60;
 
 			myplayer.player.AddBuff( mymod.BuffType("SorenessDebuff"), duration );
 
@@ -48,7 +48,7 @@ namespace LosingIsFun.Buffs {
 		}
 
 		public override void Update( Player player, ref int buff_index ) {
-			MyPlayer myplayer = player.GetModPlayer<MyPlayer>( this.mod );
+			LosingIsFunPlayer myplayer = player.GetModPlayer<LosingIsFunPlayer>( this.mod );
 			//SorenessDebuff.ApplyDefenselessness( (LosingIsFunMod)myplayer.mod, player, myplayer.Soreness );	?
 
 			if( player.buffTime[buff_index] <= 2 ) {
@@ -58,14 +58,14 @@ namespace LosingIsFun.Buffs {
 
 
 		public static void ApplyDefenselessness( LosingIsFunMod mymod, Player player, int soreness ) {
-			float defenselessness = mymod.Config.Data.SorenessDefenselessnessPercent * (float)soreness;
+			float defenselessness = mymod.ConfigJson.Data.SorenessDefenselessnessPercent * (float)soreness;
 			
 			int def = (int)((float)player.statDefense * (1f - defenselessness));
 			player.statDefense = def;
 		}
 
 		public static void ApplyLameness( LosingIsFunMod mymod, Player player, int soreness ) {
-			float lameness = mymod.Config.Data.SorenessLamenessPercent * (float)soreness;
+			float lameness = mymod.ConfigJson.Data.SorenessLamenessPercent * (float)soreness;
 
 			//player.maxRunSpeed *= 1f - lameness;
 			//player.accRunSpeed = player.maxRunSpeed;

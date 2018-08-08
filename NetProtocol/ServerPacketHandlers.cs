@@ -1,4 +1,4 @@
-﻿using HamstarHelpers.DebugHelpers;
+﻿using HamstarHelpers.Helpers.DebugHelpers;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
@@ -16,7 +16,7 @@ namespace LosingIsFun.NetProtocol {
 				ServerPacketHandlers.ReceiveModSettingsRequestOnServer( mymod, reader, player_who );
 				break;
 			default:
-				DebugHelpers.Log( "Invalid packet protocol: " + protocol );
+				LogHelpers.Log( "Invalid packet protocol: " + protocol );
 				break;
 			}
 		}
@@ -34,7 +34,7 @@ namespace LosingIsFun.NetProtocol {
 			ModPacket packet = mymod.GetPacket();
 
 			packet.Write( (byte)LosingIsFunNetProtocolTypes.ModSettings );
-			packet.Write( (string)mymod.Config.SerializeMe() );
+			packet.Write( (string)mymod.ConfigJson.SerializeMe() );
 
 			packet.Send( (int)player.whoAmI );
 		}

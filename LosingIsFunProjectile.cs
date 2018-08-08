@@ -3,10 +3,10 @@ using Terraria.ModLoader;
 
 
 namespace LosingIsFun {
-	class MyProjectile : GlobalProjectile {
+	class LosingIsFunProjectile : GlobalProjectile {
 		public override void AI( Projectile projectile ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			Player owner = Main.player[projectile.owner];
 
@@ -23,19 +23,19 @@ namespace LosingIsFun {
 		
 		public override void ModifyHitNPC( Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
 		}
 		public override void ModifyHitPlayer( Projectile projectile, Player target, ref int damage, ref bool crit ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
 		}
 		public override void ModifyHitPvp( Projectile projectile, Player target, ref int damage, ref bool crit ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
 		}
@@ -44,7 +44,7 @@ namespace LosingIsFun {
 		////////////////
 
 		private void EvaluateRangedStillness( LosingIsFunMod mymod, Player owner, LosingIsFunGlobalProjectileInstanced info ) {
-			if( mymod.Config.Data.RangedCritWithAimOnly ) {
+			if( mymod.ConfigJson.Data.RangedCritWithAimOnly ) {
 				Item held_item = owner.inventory[owner.selectedItem];
 
 				if( held_item != null && !held_item.IsAir ) {
@@ -60,8 +60,8 @@ namespace LosingIsFun {
 			} else {
 				var mymod = (LosingIsFunMod)this.mod;
 
-				if( !crit && info.IsRanged && mymod.Config.Data.RangedCritWithAimOnly ) {
-					crit = Main.rand.NextFloat() < mymod.Config.Data.RangedCritAddedAimPercentChance;
+				if( !crit && info.IsRanged && mymod.ConfigJson.Data.RangedCritWithAimOnly ) {
+					crit = Main.rand.NextFloat() < mymod.ConfigJson.Data.RangedCritAddedAimPercentChance;
 				}
 			}
 		}

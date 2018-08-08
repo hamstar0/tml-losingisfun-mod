@@ -3,7 +3,7 @@
 
 namespace LosingIsFun {
 	public class LosingIsFunConfigData {
-		public readonly static Version ConfigVersion = new Version( 1, 1, 0 );
+		public readonly static Version ConfigVersion = new Version( 1, 3, 0 );
 		public readonly static string ConfigFileName = "Losing Is Fun Config.json";
 
 
@@ -67,34 +67,9 @@ namespace LosingIsFun {
 				return false;
 			}
 
-			if( vers_since < new Version( 0, 1, 1 ) ) {
-				if( LosingIsFunConfigData._0_1_0_MinimumTownNpcTileSpacing == this.MinimumTownNpcTileSpacing ) {
-					this.MinimumTownNpcTileSpacing = new_config.MinimumTownNpcTileSpacing;
-				}
-			}
-			if( vers_since < new Version( 0, 3, 1 ) ) {
-				if( LosingIsFunConfigData._0_3_0_EvacWarpChargeDurationFrames == this.EvacWarpChargeDurationFrames ) {
-					this.EvacWarpChargeDurationFrames = new_config.EvacWarpChargeDurationFrames;
-				}
-			}
-			if( vers_since < new Version( 1, 0, 2 ) ) {
-				if( LosingIsFunConfigData._1_0_1_LuckyHorseshoeFailChance == this.LuckyHorseshoeFailChance ) {
-					this.LuckyHorseshoeFailChance = new_config.LuckyHorseshoeFailChance;
-				}
-			}
-
 			this.VersionSinceUpdate = LosingIsFunConfigData.ConfigVersion.ToString();
 
 			return true;
 		}
-
-
-		////////////////
-
-		public string _OLD_SETTINGS_BELOW = "";
-
-		public readonly static float _1_0_1_LuckyHorseshoeFailChance = 0.35f;
-		public readonly static int _0_3_0_EvacWarpChargeDurationFrames = (int)(3.5f * 60f);
-		public readonly static int _0_1_0_MinimumTownNpcTileSpacing = 10;
 	}
 }

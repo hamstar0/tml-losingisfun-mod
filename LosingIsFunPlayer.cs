@@ -1,7 +1,7 @@
-﻿using HamstarHelpers.HudHelpers;
-using HamstarHelpers.ItemHelpers;
-using HamstarHelpers.PlayerHelpers;
-using HamstarHelpers.UIHelpers;
+﻿using HamstarHelpers.Helpers.HudHelpers;
+using HamstarHelpers.Helpers.ItemHelpers;
+using HamstarHelpers.Helpers.PlayerHelpers;
+using HamstarHelpers.Helpers.UIHelpers;
 using LosingIsFun.Buffs;
 using LosingIsFun.NetProtocol;
 using Microsoft.Xna.Framework;
@@ -12,7 +12,7 @@ using Terraria.ModLoader.IO;
 
 
 namespace LosingIsFun {
-	class MyPlayer : ModPlayer {
+	class LosingIsFunPlayer : ModPlayer {
 		public int Soreness = 0;
 		public int MountHp = 1;
 
@@ -28,7 +28,7 @@ namespace LosingIsFun {
 
 		public override void clientClone( ModPlayer clone ) {
 			base.clientClone( clone );
-			var myclone = (MyPlayer)clone;
+			var myclone = (LosingIsFunPlayer)clone;
 
 			myclone.Soreness = this.Soreness;
 			myclone.MountHp = this.MountHp;
@@ -44,8 +44,8 @@ namespace LosingIsFun {
 			if( player.whoAmI == this.player.whoAmI ) {
 				if( Main.netMode != 2 ) {   // Not server
 					var mymod = (LosingIsFunMod)this.mod;
-					if( !mymod.Config.LoadFile() ) {
-						mymod.Config.SaveFile();
+					if( !mymod.ConfigJson.LoadFile() ) {
+						mymod.ConfigJson.SaveFile();
 					}
 				}
 
@@ -74,10 +74,10 @@ namespace LosingIsFun {
 			"LosingIsFun", "MountHpBar", PlayerLayer.MiscEffectsFront,
 			delegate ( PlayerDrawInfo draw_info ) {
 				Player player = draw_info.drawPlayer;
-				var modplayer = player.GetModPlayer<MyPlayer>();
+				var modplayer = player.GetModPlayer<LosingIsFunPlayer>();
 				var mymod = (LosingIsFunMod)modplayer.mod;
 				int hp = modplayer.MountHp;
-				int max_hp = mymod.Config.Data.MountMaxHp;
+				int max_hp = mymod.ConfigJson.Data.MountMaxHp;
 				if( hp == max_hp ) { return; }
 
 				float x = player.position.X + (player.width / 2);
@@ -91,10 +91,10 @@ namespace LosingIsFun {
 
 		public override void ModifyDrawLayers( List<PlayerLayer> layers ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
-			MyPlayer.MountHpBarLayer.visible = this.player.mount.Active;
-			layers.Add( MyPlayer.MountHpBarLayer );
+			LosingIsFunPlayer.MountHpBarLayer.visible = this.player.mount.Active;
+			layers.Add( LosingIsFunPlayer.MountHpBarLayer );
 		}
 
 
@@ -103,21 +103,21 @@ namespace LosingIsFun {
 
 		public override void PostHurt( bool pvp, bool quiet, double damage, int hitDirection, bool crit ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			if( !quiet && this.player.mount.Active ) {
-				this.MountHpRegenTimer = mymod.Config.Data.MountHpRegenRate;
+				this.MountHpRegenTimer = mymod.ConfigJson.Data.MountHpRegenRate;
 				if( this.MountHp > 0 ) { this.MountHp--; }
 
 				if( this.MountHp == 0 ) {
-					this.player.AddBuff( mymod.BuffType<BuckedDebuff>(), mymod.Config.Data.MountEjectDebuffTime );
+					this.player.AddBuff( mymod.BuffType<BuckedDebuff>(), mymod.ConfigJson.Data.MountEjectDebuffTime );
 				}
 			}
 		}
 
 		public override bool PreItemCheck() {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return base.PreItemCheck(); }
+			if( !mymod.ConfigJson.Data.Enabled ) { return base.PreItemCheck(); }
 
 			Item use_item = this.player.inventory[this.player.selectedItem];
 			bool can_run_evac = false, evac_is_done = false;
@@ -132,7 +132,7 @@ namespace LosingIsFun {
 				case 3124:  // Cell Phone
 				case 3199:  // Ice Mirror
 				case 2350:  // Recall Potion
-					if( mymod.Config.Data.EvacWarpChargeDurationFrames > 0 ) {
+					if( mymod.ConfigJson.Data.EvacWarpChargeDurationFrames > 0 ) {
 						if( this.player.itemTime > 0 ) {    // In use
 							this.player.itemTime = use_item.useTime;
 							can_run_evac = true;
@@ -167,7 +167,7 @@ namespace LosingIsFun {
 
 		public override void PreUpdate() {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			// Detect nurse use + add soreness
 			if( PlayerNPCHelpers.HasUsedNurse( this.player ) ) {
@@ -180,7 +180,7 @@ namespace LosingIsFun {
 			}
 
 			// Restrict gravitation potion rapid changing
-			if( this.player.gravControl && mymod.Config.Data.GravPotionFlipDelay > 0f ) {
+			if( this.player.gravControl && mymod.ConfigJson.Data.GravPotionFlipDelay > 0f ) {
 				if( this.GravChangeDelay > 0 ) {
 					if( this.PrevGravDir == -1 && this.player.gravDir == 1f ) {
 						this.player.gravDir = -1f;
@@ -191,7 +191,7 @@ namespace LosingIsFun {
 				} else {
 					if( this.PrevGravDir != this.player.gravDir ) {
 						this.PrevGravDir = this.player.gravDir;
-						this.GravChangeDelay = mymod.Config.Data.GravPotionFlipDelay;
+						this.GravChangeDelay = mymod.ConfigJson.Data.GravPotionFlipDelay;
 					}
 				}
 			}
@@ -200,9 +200,9 @@ namespace LosingIsFun {
 			if( this.MountHpRegenTimer > 0 ) {
 				this.MountHpRegenTimer--;
 			} else {
-				if( this.MountHp < mymod.Config.Data.MountMaxHp ) {
+				if( this.MountHp < mymod.ConfigJson.Data.MountMaxHp ) {
 					this.MountHp++;
-					this.MountHpRegenTimer = mymod.Config.Data.MountHpRegenRate;
+					this.MountHpRegenTimer = mymod.ConfigJson.Data.MountHpRegenRate;
 				}
 			}
 		}
@@ -210,7 +210,7 @@ namespace LosingIsFun {
 
 		public override void PostUpdate() {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			// Apply soreness defense debuff (cannot use PreUpdateBuffs, PostUpdateBuffs, or ModBuff.Update for some reason)
 			if( this.Soreness > 0 ) {
@@ -225,32 +225,32 @@ namespace LosingIsFun {
 
 		public override void UpdateEquips( ref bool wallSpeedBuff, ref bool tileSpeedBuff, ref bool tileRangeBuff ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			// Set fall immunity to work only 50% of the time
 			if( this.player.noFallDmg ) {
-				this.player.noFallDmg = Main.rand.NextFloat() <= mymod.Config.Data.LuckyHorseshoeFailChance;
+				this.player.noFallDmg = Main.rand.NextFloat() <= mymod.ConfigJson.Data.LuckyHorseshoeFailChance;
 			}
 		}
 
 
 		public override void PostUpdateEquips() {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
-			if( this.player.wings == 13 && mymod.Config.Data.LeafWingsTime >= 0 ) {
-				this.player.wingTimeMax = mymod.Config.Data.LeafWingsTime;
+			if( this.player.wings == 13 && mymod.ConfigJson.Data.LeafWingsTime >= 0 ) {
+				this.player.wingTimeMax = mymod.ConfigJson.Data.LeafWingsTime;
 			}
 		}
 
 
 		public override void PostUpdateRunSpeeds() {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			if( this.player.controlUseItem && this.player.itemTime > 1 ) {
-				if( ItemIdentityHelpers.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
-					var fric = mymod.Config.Data.YoyoMoveSpeedClamp;
+				if( ItemAttributeHelpers.IsYoyo( this.player.inventory[this.player.selectedItem] ) ) {
+					var fric = mymod.ConfigJson.Data.YoyoMoveSpeedClamp;
 
 					if( this.player.velocity.X > fric ) {
 						this.player.velocity.X -= 0.12f;
@@ -268,10 +268,10 @@ namespace LosingIsFun {
 
 		public override void UpdateDead() {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.Config.Data.Enabled ) { return; }
+			if( !mymod.ConfigJson.Data.Enabled ) { return; }
 
 			// No respawns during bosses
-			if( this.player.respawnTimer > 0 && mymod.Config.Data.NoRespawnDuringBosses ) {
+			if( this.player.respawnTimer > 0 && mymod.ConfigJson.Data.NoRespawnDuringBosses ) {
 				for( int i=0; i<Main.npc.Length; i++ ) {
 					NPC npc = Main.npc[i];
 					if( npc != null && npc.active && npc.boss ) {
@@ -295,7 +295,7 @@ namespace LosingIsFun {
 			}
 
 			var mymod = (LosingIsFunMod)this.mod;
-			var duration = mymod.Config.Data.EvacWarpChargeDurationFrames;
+			var duration = mymod.ConfigJson.Data.EvacWarpChargeDurationFrames;
 
 			this.EvacTimer++;
 

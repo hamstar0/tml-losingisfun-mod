@@ -1,33 +1,21 @@
-﻿using HamstarHelpers.Utilities.Config;
+﻿using HamstarHelpers.Components.Config;
 using LosingIsFun.Buffs;
 using LosingIsFun.NetProtocol;
-using System;
 using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 
 
 namespace LosingIsFun {
-	class LosingIsFunMod : Mod {
+	partial class LosingIsFunMod : Mod {
 		public static LosingIsFunMod Instance { get; private set; }
-
-		public static string GithubUserName { get { return "hamstar0"; } }
-		public static string GithubProjectName { get { return "tml-losingisfun-mod"; } }
-
-		public static string ConfigFileRelativePath {
-			get { return ConfigurationDataBase.RelativePath + Path.DirectorySeparatorChar + LosingIsFunConfigData.ConfigFileName; }
-		}
-		public static void ReloadConfigFromFile() {
-			if( Main.netMode != 0 ) {
-				throw new Exception( "Cannot reload configs outside of single player." );
-			}
-			LosingIsFunMod.Instance.Config.LoadFile();
-		}
+		
 
 
 		////////////////
 
-		public JsonConfig<LosingIsFunConfigData> Config { get; private set; }
+		public JsonConfig<LosingIsFunConfigData> ConfigJson { get; private set; }
+		public LosingIsFunConfigData Config { get { return this.ConfigJson.Data; } }
 
 
 		////////////////
@@ -38,8 +26,8 @@ namespace LosingIsFun {
 				AutoloadGores = true,
 				AutoloadSounds = true
 			};
-			
-			this.Config = new JsonConfig<LosingIsFunConfigData>( LosingIsFunConfigData.ConfigFileName,
+
+			this.ConfigJson = new JsonConfig<LosingIsFunConfigData>( LosingIsFunConfigData.ConfigFileName,
 				ConfigurationDataBase.RelativePath, new LosingIsFunConfigData() );
 		}
 
@@ -47,12 +35,6 @@ namespace LosingIsFun {
 
 		public override void Load() {
 			LosingIsFunMod.Instance = this;
-
-			var hamhelpmod = ModLoader.GetMod( "HamstarHelpers" );
-			var min_ver = new Version( 1, 2, 0 );
-			if( hamhelpmod.Version < min_ver ) {
-				throw new Exception( "Hamstar Helpers must be version " + min_ver.ToString() + " or greater." );
-			}
 
 			this.LoadConfig();
 
@@ -62,13 +44,13 @@ namespace LosingIsFun {
 		}
 
 		private void LoadConfig() {
-			if( !this.Config.LoadFile() ) {
-				this.Config.SaveFile();
+			if( !this.ConfigJson.LoadFile() ) {
+				this.ConfigJson.SaveFile();
 			}
 
-			if( this.Config.Data.UpdateToLatestVersion() ) {
+			if( this.ConfigJson.Data.UpdateToLatestVersion() ) {
 				ErrorLogger.Log( "Losing Is Fun updated to " + LosingIsFunConfigData.ConfigVersion.ToString() );
-				this.Config.SaveFile();
+				this.ConfigJson.SaveFile();
 			}
 		}
 

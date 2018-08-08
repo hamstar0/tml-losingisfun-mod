@@ -6,26 +6,31 @@ Scrapped or deferred
 -	Boomerang nerf
 -	Change gem hook recipes (require a hook)
 -	Bosses get harder with each kill
--	Set all world gen chests to be locked and require gold keys (3 to start; +1 per boss)
+-	Set all world gen chests to be locked and require special keys (+1 per boss)
 -	Set yoyo items to thrower class
 -	Set player velocity to add to melee and thrown projectile velocity and damage
 -	Buff EoW + Destroyer (segments get added defense)
 -	Gills potions drown on land
-v1.2
--	Disable housing constraints by default (unless options allow otherwise)
--	Slime mount can only stomp 3x in rapid succession
--	Add summon item warmup
--	Platforms can't reach more than 8 horizontal units without a 'ground'
--	Direction of damage taken shows up on HUD
+-	Platinum armor = titanium armor buff w/ long cooldown
+-	Set gold armor to give midas buff
 -	Limit unique items per boss per player to 1
+-	Slime mount can only stomp 3x in rapid succession
+-	(Optional) Platforms can't reach more than 8 horizontal units without a 'ground'
+-	Add summon item warmup
+-	@Create 'Item Configs' mod (merge with Nihilism)
+
+
+
+v1.2
+-	(Optional) disable natural life regen
+-	Disable housing constraints by default (unless options allow otherwise)
+-	Direction of damage taken shows up on HUD
 -	Nerf ice blade
 -	Add option for soreness to lower attack damage
 -	Add option to get Soreness debuffs from death
 -	Add bool config fields for enable/disable of specific features
--	Platinum armor = titanium armor buff w/ long cooldown
 -	Set obsidian armor to give obsidian skull protection
--	Set gold armor to give midas buff
--	@Create 'Item Configs' mod (merge with Nihilism)
+-	Set recall/magic mirror to add 60s chaos state debuff
 
 v1.1
 -	Crimson mobs have 1/20 chance of dropping Worm Teeth
