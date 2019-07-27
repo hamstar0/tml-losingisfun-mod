@@ -41,11 +41,11 @@ namespace LosingIsFun {
 
 		////////////////
 
-		public override void SyncPlayer( int to_who, int from_who, bool new_player ) {
+		public override void SyncPlayer( int toWho, int fromWho, bool newPlayer ) {
 			var mymod = (LosingIsFunMod)this.mod;
 
 			if( Main.netMode == 2 ) {
-				if( to_who == -1 && from_who == this.player.whoAmI ) {
+				if( toWho == -1 && fromWho == this.player.whoAmI ) {
 					this.OnServerConnect();
 				}
 			}

@@ -11,7 +11,7 @@ namespace LosingIsFun.Buffs {
 			Main.debuff[ this.Type ] = true;
 		}
 
-		public override void Update( Player player, ref int buff_index ) {
+		public override void Update( Player player, ref int buffIndex ) {
 			if( player.mount.Active ) {
 				player.mount.Dismount( player );
 			}

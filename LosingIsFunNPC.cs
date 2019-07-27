@@ -13,43 +13,43 @@ namespace LosingIsFun {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Enabled ) { return; }
 
-			NPC my_npc = null;
-			IList<NPC> town_npcs = new List<NPC>();
-			string too_close = "";
-			bool too_high = false;
+			NPC myNpc = null;
+			IList<NPC> townNpcs = new List<NPC>();
+			string tooClose = "";
+			bool tooHigh = false;
 
 			for( int i = 0; i < Main.npc.Length; i++ ) {
 				NPC npc = Main.npc[i];
 				if( npc != null && npc.active && npc.type != 453 && npc.type != 368 ) {	// Skeleton Merchant & Travelling Merchant
 					if( npc.type == type ) {
-						my_npc = npc;
+						myNpc = npc;
 					} else if( npc.townNPC && !npc.homeless ) {
-						town_npcs.Add( npc );
+						townNpcs.Add( npc );
 					}
 				}
 			}
 
-			if( my_npc != null ) {
+			if( myNpc != null ) {
 				// Check distances between NPCs
-				foreach( NPC npc in town_npcs ) {
-					int x_dist = Math.Abs( my_npc.homeTileX - npc.homeTileX );
-					int y_dist = Math.Abs( my_npc.homeTileY - npc.homeTileY );
-					double dist = Math.Sqrt( (x_dist * x_dist) + (y_dist * y_dist) );
+				foreach( NPC npc in townNpcs ) {
+					int xDist = Math.Abs( myNpc.homeTileX - npc.homeTileX );
+					int yDist = Math.Abs( myNpc.homeTileY - npc.homeTileY );
+					double dist = Math.Sqrt( (xDist * xDist) + (yDist * yDist) );
 
 					if( dist <= mymod.Config.MinimumTownNpcTileSpacing ) {
-						too_close = npc.TypeName;
+						tooClose = npc.TypeName;
 						break;
 					}
 				}
 
 				// Check space beneath NPC's house
-				if( !my_npc.homeless ) {
+				if( !myNpc.homeless ) {
 					int solids = 0;
 					int walls = 0;
-					int min_x = 16;
-					int min_y = 40;
-					for( int i = my_npc.homeTileX - (min_x / 2); i < my_npc.homeTileX + (min_x / 2); i++ ) {
-						for( int j = my_npc.homeTileY; j < my_npc.homeTileY + min_y; j++ ) {
+					int minX = 16;
+					int minY = 40;
+					for( int i = myNpc.homeTileX - (minX / 2); i < myNpc.homeTileX + (minX / 2); i++ ) {
+						for( int j = myNpc.homeTileY; j < myNpc.homeTileY + minY; j++ ) {
 							Tile tile = Main.tile[i, j];
 							if( tile == null || TileHelpers.IsAir( tile ) ) { continue; }
 
@@ -63,17 +63,17 @@ namespace LosingIsFun {
 
 					// +1/2 solid needed
 //DebugHelper.Display["tiles"] = "walls "+walls+", solids "+solids+" = "+(walls+solids)+" < "+((float)((min_x + 1) * min_y) * mymod.Config.Data.MinimumRatioTownNPCSolidBlocks);
-					if( (solids+walls) < (float)((min_x + 1) * min_y) * mymod.Config.MinimumRatioTownNPCSolidBlocks ) {
-						too_high = true;
+					if( (solids+walls) < (float)((minX + 1) * minY) * mymod.Config.MinimumRatioTownNPCSolidBlocks ) {
+						tooHigh = true;
 					}
 				}
 			}
 
-			if( too_close != "" || too_high ) {
-				if( too_close != "" ) {
-					Main.NewText( my_npc.GivenName + " the " + my_npc.TypeName + " is housed too close to the " + too_close + " to setup shop!", Main.errorColor );
-				} else if( too_high ) {
-					Main.NewText( my_npc.GivenName + " the " + my_npc.TypeName + " is housed too high to setup shop!", Main.errorColor );
+			if( tooClose != "" || tooHigh ) {
+				if( tooClose != "" ) {
+					Main.NewText( myNpc.GivenName + " the " + myNpc.TypeName + " is housed too close to the " + tooClose + " to setup shop!", Main.errorColor );
+				} else if( tooHigh ) {
+					Main.NewText( myNpc.GivenName + " the " + myNpc.TypeName + " is housed too high to setup shop!", Main.errorColor );
 				}
 
 				for( int i = nextSlot - 1; i >= 0; i-- ) {

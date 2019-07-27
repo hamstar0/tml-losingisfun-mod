@@ -26,27 +26,27 @@ namespace LosingIsFun {
 			var mymod = (LosingIsFunMod)this.mod;
 			if( !mymod.Config.Enabled ) { return base.PreItemCheck(); }
 
-			Item use_item = this.player.inventory[this.player.selectedItem];
-			bool can_run_evac = false, evac_is_done = false;
+			Item useItem = this.player.inventory[this.player.selectedItem];
+			bool canRunEvac = false, evacIsDone = false;
 
-			if( use_item.IsTheSameAs( Main.mouseItem ) ) {
-				use_item = Main.mouseItem;
+			if( useItem.IsTheSameAs( Main.mouseItem ) ) {
+				useItem = Main.mouseItem;
 			}
 
-			if( use_item != null && !use_item.IsAir ) { // Apply item effects
-				switch( use_item.type ) {
+			if( useItem != null && !useItem.IsAir ) { // Apply item effects
+				switch( useItem.type ) {
 				case 50:    // Magic Mirror
 				case 3124:  // Cell Phone
 				case 3199:  // Ice Mirror
 				case 2350:  // Recall Potion
 					if( mymod.Config.EvacWarpChargeDurationFrames > 0 ) {
 						if( this.player.itemTime > 0 ) {    // In use
-							this.player.itemTime = use_item.useTime;
-							can_run_evac = true;
+							this.player.itemTime = useItem.useTime;
+							canRunEvac = true;
 
 							if( this.player.itemAnimation == 0 ) {
-								if( use_item.type == 2350 ) {   // Recall Potion
-									ItemHelpers.ReduceStack( use_item, 1 );
+								if( useItem.type == 2350 ) {   // Recall Potion
+									ItemHelpers.ReduceStack( useItem, 1 );
 									this.EvacTimer += 30;   // Speed up warp by 0.5 seconds for Recall Potion
 								}
 								this.EvacInUse = true;
@@ -59,11 +59,11 @@ namespace LosingIsFun {
 			}
 
 			if( this.EvacInUse ) {
-				can_run_evac = true;
+				canRunEvac = true;
 			}
 			
-			if( !can_run_evac || !this.RunEvac( out evac_is_done ) ) {
-				if( evac_is_done ) { this.player.itemTime = 0; }
+			if( !canRunEvac || !this.RunEvac( out evacIsDone ) ) {
+				if( evacIsDone ) { this.player.itemTime = 0; }
 				this.EvacTimer = 0;
 				this.EvacInUse = false;
 			}
@@ -74,12 +74,12 @@ namespace LosingIsFun {
 
 		////////////////
 
-		private bool RunEvac( out bool is_interrupted ) {
-			is_interrupted = false;
+		private bool RunEvac( out bool isInterrupted ) {
+			isInterrupted = false;
 
 			if( this.player.velocity.X != 0 || this.player.velocity.Y != 0 ) {
 				Main.NewText( "Recall interrupted by movement.", Color.Yellow );
-				is_interrupted = true;
+				isInterrupted = true;
 				return false;
 			}
 

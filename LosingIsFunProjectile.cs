@@ -26,7 +26,7 @@ namespace LosingIsFun {
 				// Ranged attacks can crit only while player is standing still
 				if( this.CanCrit == null ) {
 					this.CanCrit = true;
-					this.EvaluateRangedStillness( mymod, owner );
+					this.EvaluateRangedStillness( owner );
 				}
 			}
 		}
@@ -53,13 +53,15 @@ namespace LosingIsFun {
 
 		////////////////
 
-		private void EvaluateRangedStillness( LosingIsFunMod mymod, Player owner ) {
-			if( mymod.Config.RangedCritWithAimOnly ) {
-				Item held_item = owner.inventory[owner.selectedItem];
+		private void EvaluateRangedStillness( Player owner ) {
+			var mymod = (LosingIsFunMod)this.mod;
 
-				if( held_item != null && !held_item.IsAir ) {
-					this.IsRanged = held_item.ranged;
-					this.CanCrit = held_item.ranged && (owner.velocity.X == 0);
+			if( mymod.Config.RangedCritWithAimOnly ) {
+				Item heldItem = owner.inventory[owner.selectedItem];
+
+				if( heldItem != null && !heldItem.IsAir ) {
+					this.IsRanged = heldItem.ranged;
+					this.CanCrit = heldItem.ranged && (owner.velocity.X == 0);
 				}
 			}
 		}
