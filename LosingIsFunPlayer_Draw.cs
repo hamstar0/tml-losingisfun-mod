@@ -1,5 +1,5 @@
-﻿using HamstarHelpers.Helpers.HudHelpers;
-using HamstarHelpers.Helpers.UIHelpers;
+﻿using HamstarHelpers.Helpers.HUD;
+using HamstarHelpers.Helpers.UI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
@@ -15,21 +15,21 @@ namespace LosingIsFun {
 				var modplayer = player.GetModPlayer<LosingIsFunPlayer>();
 				var mymod = (LosingIsFunMod)modplayer.mod;
 				int hp = modplayer.MountHp;
-				int max_hp = mymod.ConfigJson.Data.MountMaxHp;
+				int max_hp = mymod.Config.MountMaxHp;
 				if( hp == max_hp ) { return; }
 
 				float x = player.position.X + (player.width / 2);
 				float y = player.position.Y + 64;
 				var pos = UIHelpers.ConvertToScreenPosition( new Vector2(x, y) );
 
-				HudHealthBarHelpers.DrawHealthBar( Main.spriteBatch, pos.X, pos.Y, hp, max_hp, Color.White, 1f );
+				HUDHealthBarHelpers.DrawHealthBar( Main.spriteBatch, pos.X, pos.Y, hp, max_hp, Color.White, 1f );
 
 			}
 		);
 
 		public override void ModifyDrawLayers( List<PlayerLayer> layers ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.ConfigJson.Data.Enabled ) { return; }
+			if( !mymod.Config.Enabled ) { return; }
 
 			LosingIsFunPlayer.MountHpBarLayer.visible = this.player.mount.Active;
 			layers.Add( LosingIsFunPlayer.MountHpBarLayer );

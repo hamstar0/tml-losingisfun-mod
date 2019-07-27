@@ -27,7 +27,7 @@ namespace LosingIsFun.Buffs {
 
 		public static void GiveTo( LosingIsFunPlayer myplayer ) {
 			LosingIsFunMod mymod = (LosingIsFunMod)myplayer.mod;
-			int duration = mymod.ConfigJson.Data.SorenessDurationSeconds * 60;
+			int duration = mymod.Config.SorenessDurationSeconds * 60;
 
 			myplayer.player.AddBuff( mymod.BuffType("SorenessDebuff"), duration );
 
@@ -58,14 +58,14 @@ namespace LosingIsFun.Buffs {
 
 
 		public static void ApplyDefenselessness( LosingIsFunMod mymod, Player player, int soreness ) {
-			float defenselessness = mymod.ConfigJson.Data.SorenessDefenselessnessPercent * (float)soreness;
+			float defenselessness = mymod.Config.SorenessDefenselessnessPercent * (float)soreness;
 			
 			int def = (int)((float)player.statDefense * (1f - defenselessness));
 			player.statDefense = def;
 		}
 
 		public static void ApplyLameness( LosingIsFunMod mymod, Player player, int soreness ) {
-			float lameness = mymod.ConfigJson.Data.SorenessLamenessPercent * (float)soreness;
+			float lameness = mymod.Config.SorenessLamenessPercent * (float)soreness;
 
 			//player.maxRunSpeed *= 1f - lameness;
 			//player.accRunSpeed = player.maxRunSpeed;

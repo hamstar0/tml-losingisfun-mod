@@ -4,83 +4,76 @@ using Terraria.ModLoader;
 
 namespace LosingIsFun {
 	class LosingIsFunProjectile : GlobalProjectile {
+		public bool IsRanged;
+		public bool? CanCrit = null;
+
+		////////////////
+
+		public override bool InstancePerEntity => true;
+		public override bool CloneNewInstances => false;	// true;? TODO: Verify.
+
+
+
+		////////////////
+		
 		public override void AI( Projectile projectile ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.ConfigJson.Data.Enabled ) { return; }
+			if( !mymod.Config.Enabled ) { return; }
 
 			Player owner = Main.player[projectile.owner];
 
 			if( projectile.owner >= 0 && owner != null && owner.active ) {
-				var info = projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod );
-
 				// Ranged attacks can crit only while player is standing still
-				if( info.CanCrit == null ) {
-					info.CanCrit = true;
-					this.EvaluateRangedStillness( mymod, owner, info );
+				if( this.CanCrit == null ) {
+					this.CanCrit = true;
+					this.EvaluateRangedStillness( mymod, owner );
 				}
 			}
 		}
 		
 		public override void ModifyHitNPC( Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.ConfigJson.Data.Enabled ) { return; }
+			if( !mymod.Config.Enabled ) { return; }
 
-			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
+			this.EvaluateCrit( ref crit );
 		}
 		public override void ModifyHitPlayer( Projectile projectile, Player target, ref int damage, ref bool crit ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.ConfigJson.Data.Enabled ) { return; }
+			if( !mymod.Config.Enabled ) { return; }
 
-			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
+			this.EvaluateCrit( ref crit );
 		}
 		public override void ModifyHitPvp( Projectile projectile, Player target, ref int damage, ref bool crit ) {
 			var mymod = (LosingIsFunMod)this.mod;
-			if( !mymod.ConfigJson.Data.Enabled ) { return; }
+			if( !mymod.Config.Enabled ) { return; }
 
-			this.EvaluateCrit( projectile.GetGlobalProjectile<LosingIsFunGlobalProjectileInstanced>( this.mod ), ref crit );
+			this.EvaluateCrit( ref crit );
 		}
 
 
 		////////////////
 
-		private void EvaluateRangedStillness( LosingIsFunMod mymod, Player owner, LosingIsFunGlobalProjectileInstanced info ) {
-			if( mymod.ConfigJson.Data.RangedCritWithAimOnly ) {
+		private void EvaluateRangedStillness( LosingIsFunMod mymod, Player owner ) {
+			if( mymod.Config.RangedCritWithAimOnly ) {
 				Item held_item = owner.inventory[owner.selectedItem];
 
 				if( held_item != null && !held_item.IsAir ) {
-					info.IsRanged = held_item.ranged;
-					info.CanCrit = held_item.ranged && (owner.velocity.X == 0);
+					this.IsRanged = held_item.ranged;
+					this.CanCrit = held_item.ranged && (owner.velocity.X == 0);
 				}
 			}
 		}
 
-		private void EvaluateCrit( LosingIsFunGlobalProjectileInstanced info, ref bool crit ) {
-			if( info.CanCrit == false ) {
+		private void EvaluateCrit( ref bool crit ) {
+			if( this.CanCrit == false ) {
 				crit = false;
 			} else {
 				var mymod = (LosingIsFunMod)this.mod;
 
-				if( !crit && info.IsRanged && mymod.ConfigJson.Data.RangedCritWithAimOnly ) {
-					crit = Main.rand.NextFloat() < mymod.ConfigJson.Data.RangedCritAddedAimPercentChance;
+				if( !crit && this.IsRanged && mymod.Config.RangedCritWithAimOnly ) {
+					crit = Main.rand.NextFloat() < mymod.Config.RangedCritAddedAimPercentChance;
 				}
 			}
-		}
-	}
-
-
-
-	class LosingIsFunGlobalProjectileInstanced : GlobalProjectile {
-		public override bool InstancePerEntity { get { return true; } }
-		public override bool CloneNewInstances { get { return true; } }
-
-		public bool IsRanged;
-		public bool? CanCrit = null;
-
-		public override GlobalProjectile Clone() {
-			var clone = new LosingIsFunGlobalProjectileInstanced();
-			clone.IsRanged = this.IsRanged;
-			clone.CanCrit = this.CanCrit;
-			return clone;
 		}
 	}
 }

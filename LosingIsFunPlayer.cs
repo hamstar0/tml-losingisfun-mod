@@ -1,5 +1,4 @@
 ﻿using LosingIsFun.Buffs;
-using LosingIsFun.NetProtocol;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -16,12 +15,14 @@ namespace LosingIsFun {
 		private int GravChangeDelay = 0;
 		private float PrevGravDir = 1f;
 		private int MountHpRegenTimer = 0;
+		
+		////////////////
+
+		public override bool CloneNewInstances => false;
 
 
 
 		////////////////
-
-		public override bool CloneNewInstances { get { return false; } }
 
 		public override void clientClone( ModPlayer clone ) {
 			base.clientClone( clone );
@@ -54,15 +55,6 @@ namespace LosingIsFun {
 			if( player.whoAmI != Main.myPlayer ) { return; }
 			if( this.player.whoAmI != Main.myPlayer ) { return; }
 
-			var mymod = (LosingIsFunMod)this.mod;
-
-			if( Main.netMode == 0 ) {
-				if( !mymod.ConfigJson.LoadFile() ) {
-					mymod.ConfigJson.SaveFile();
-					ErrorLogger.Log( "Losing Is Fun config " + LosingIsFunConfigData.ConfigVersion.ToString() + " created (ModPlayer.OnEnterWorld())." );
-				}
-			}
-
 			if( Main.netMode == 0 ) {
 				this.OnSingleConnect();
 			}
@@ -75,7 +67,6 @@ namespace LosingIsFun {
 		private void OnSingleConnect() { }
 
 		private void OnClientConnect() {
-			ClientPacketHandlers.SendModSettingsRequestFromClient( this.mod );
 		}
 
 		private void OnServerConnect() { }
