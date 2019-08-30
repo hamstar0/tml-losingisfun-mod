@@ -61,6 +61,12 @@ namespace LosingIsFun {
 					item.damage = mymod.Config.ChlorophyteBulletDamage; // was 10
 				}
 				break;
+			case ItemID.BeesKnees:
+				if( mymod.Config.BeesKneesUseTime >= 0 ) {
+					item.useTime = mymod.Config.BeesKneesUseTime; // was 23
+					item.useAnimation = item.useTime;
+				}
+				break;
 			}
 		}
 	}

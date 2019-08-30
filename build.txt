@@ -1,5 +1,5 @@
 author = hamstar
-version = 1.4.0
+version = 1.4.1
 displayName = Losing Is Fun
 modReferences = HamstarHelpers@5.0.0
 buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*

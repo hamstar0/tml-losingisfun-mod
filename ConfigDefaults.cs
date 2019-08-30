@@ -66,6 +66,9 @@ namespace LosingIsFun {
 		[DefaultValue( 20 )]
 		public int LeafWingsTime = 20; // was 160
 
+		[DefaultValue( 46 )]
+		public int BeesKneesUseTime = 46;   // was 23
+
 
 		[DefaultValue( true )]
 		public bool EterniaCrystalAntiHoik = true;
