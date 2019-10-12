@@ -57,7 +57,7 @@ namespace LosingIsFun {
 
 			// Apply soreness defense debuff (cannot use PreUpdateBuffs, PostUpdateBuffs, or ModBuff.Update for some reason)
 			if( this.Soreness > 0 ) {
-				if( this.player.FindBuffIndex(mymod.BuffType<SorenessDebuff>()) == -1 ) {
+				if( this.player.FindBuffIndex( ModContent.BuffType<SorenessDebuff>()) == -1 ) {
 					this.Soreness = 0;
 				} else {
 					SorenessDebuff.ApplyDefenselessness( (LosingIsFunMod)this.mod, this.player, this.Soreness );

@@ -21,7 +21,7 @@ namespace LosingIsFun.Buffs {
 
 		public static void UpdateIcon( LosingIsFunPlayer myplayer ) {
 			LosingIsFunMod mymod = (LosingIsFunMod)myplayer.mod;
-			int buffType = mymod.BuffType<SorenessDebuff>();
+			int buffType = ModContent.BuffType<SorenessDebuff>();
 			Main.buffTexture[buffType] = SorenessDebuff.Textures[myplayer.Soreness - 1];
 		}
 
@@ -48,7 +48,7 @@ namespace LosingIsFun.Buffs {
 		}
 
 		public override void Update( Player player, ref int buffIndex ) {
-			LosingIsFunPlayer myplayer = player.GetModPlayer<LosingIsFunPlayer>( this.mod );
+			var myplayer = ModContent.GetInstance<LosingIsFunPlayer>();
 			//SorenessDebuff.ApplyDefenselessness( (LosingIsFunMod)myplayer.mod, player, myplayer.Soreness );	?
 
 			if( player.buffTime[buffIndex] <= 2 ) {

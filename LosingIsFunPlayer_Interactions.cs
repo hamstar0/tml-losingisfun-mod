@@ -17,7 +17,7 @@ namespace LosingIsFun {
 				if( this.MountHp > 0 ) { this.MountHp--; }
 
 				if( this.MountHp == 0 ) {
-					this.player.AddBuff( mymod.BuffType<BuckedDebuff>(), mymod.Config.MountEjectDebuffTime );
+					this.player.AddBuff( ModContent.BuffType<BuckedDebuff>(), mymod.Config.MountEjectDebuffTime );
 				}
 			}
 		}

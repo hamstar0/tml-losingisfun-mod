@@ -11,7 +11,7 @@ namespace LosingIsFun {
 
 		////////////////
 
-		public LosingIsFunConfig Config => this.GetConfig<LosingIsFunConfig>();
+		public LosingIsFunConfig Config => ModContent.GetInstance<LosingIsFunConfig>();
 
 
 		////////////////
