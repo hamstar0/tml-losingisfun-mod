@@ -5,6 +5,11 @@ using Terraria.ModLoader.Config;
 
 
 namespace LosingIsFun {
+	class MyFloatInputElement : FloatInputElement { }
+
+
+
+
 	public class LosingIsFunConfig : ModConfig {
 		public override ConfigScope Mode => ConfigScope.ServerSide;
 
@@ -22,7 +27,7 @@ namespace LosingIsFun {
 		[Label( "Min. req. ratio of solid ground under town NPC" )]
 		[Range( 0f, 1f )]
 		[DefaultValue( 0.5f )]
-		[CustomModConfigItem( typeof( FloatInputElement ) )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float MinimumRatioTownNPCSolidBlocks = 0.5f;
 
 
@@ -33,13 +38,13 @@ namespace LosingIsFun {
 
 		[Range( 0f, 1f )]
 		[DefaultValue( 0.35f )]
-		[CustomModConfigItem( typeof( FloatInputElement ) )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float LuckyHorseshoeFailChance = 0.35f;
 
 
 		[Range( 0f, 20f )]
 		[DefaultValue( 2f )]
-		[CustomModConfigItem( typeof( FloatInputElement ) )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float YoyoMoveSpeedClamp = 2f;
 
 
@@ -102,12 +107,12 @@ namespace LosingIsFun {
 
 		[Range( 0f, 1f )]
 		[DefaultValue( 0.1f )]
-		[CustomModConfigItem( typeof( FloatInputElement ) )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float SorenessLamenessPercent = 0.1f;
 
 		[Range( 0f, 1f )]
 		[DefaultValue( 0.1f )]
-		[CustomModConfigItem( typeof( FloatInputElement ) )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float SorenessDefenselessnessPercent = 0.1f;
 
 
@@ -116,7 +121,7 @@ namespace LosingIsFun {
 
 		[Range( 0f, 1f )]
 		[DefaultValue( 0.15f )]
-		[CustomModConfigItem( typeof( FloatInputElement ) )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float RangedCritAddedAimPercentChance = 0.15f;
 
 
@@ -143,7 +148,7 @@ namespace LosingIsFun {
 
 		[Range( 0f, 1f )]
 		[DefaultValue( 0.04f )]
-		[CustomModConfigItem( typeof( FloatInputElement ) )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float CrimsonMobsWormToothDropChance = 0.04f;
 	}
 }
