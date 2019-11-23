@@ -1,5 +1,4 @@
-﻿using HamstarHelpers.Helpers.Items;
-using HamstarHelpers.Helpers.Items.Attributes;
+﻿using HamstarHelpers.Helpers.Items.Attributes;
 using HamstarHelpers.Helpers.Players;
 using LosingIsFun.Buffs;
 using Terraria;
